@@ -5,12 +5,12 @@
   <title>Login</title>
 </head>
 <body>
-  <?= form_open('inicio/login') ?>
+  <?= form_open('usuarios/login') ?>
     <?= form_label('Nick', 'nick') ?>
     <?= form_input('nick', set_value('nick')) ?> <br>
     <?= form_label('Pass', 'pass') ?>
     <?= form_password('pass') ?> <br>
-    <?= form_submit('enviar','Enviar') ?>
+    <?= form_submit('login','Login') ?>
   <?= form_close() ?>
 
   <?= anchor('registro', '<button>Registrate!</button>') ?>

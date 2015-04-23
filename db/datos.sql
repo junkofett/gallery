@@ -106,6 +106,25 @@ insert into usuarios (nick, pass, email, descripcion_usr, fecha_nac)
 --BLOQUE CATEGORIAS
 insert into categorias (id, nombre_cat, padre_id)
       values(0, 'ROOT', 0);
+insert into categorias (id, nombre_cat, padre_id)
+      values(1,'Digital', 0),
+            (2,'Tradicional', 0),
+            (3,'2D', 1),
+            (4,'3D', 1),
+            (5,'Paisajes', 3),
+            (6,'Paisajes', 4),
+            (7,'Personajes', 3),
+            (8,'Personajes', 4),
+            (9,'Retratos', 7),
+            (10,'Retratos', 8),
+            (11,'Escena', 3),
+            (12,'Escena', 4),
+            (13,'Pintura', 2),
+            (14,'Escultura', 2),
+            (15,'Paisajes', 13),
+            (16,'Personajes', 13),
+            (17,'Retratos', 16),
+            (18,'Lego', 14);
 
 /*create table categorias(
   id            bigserial     constraint pk_categorias primary key,

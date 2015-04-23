@@ -2,63 +2,57 @@
 
 class Inicio extends CI_Controller {
 
+  public $tabla;
+
   public function index(){
-    if($this->session->userdata('usuario'))
-      $this->load->view('home');
-    else
-      $this->load->view('login');
+    $res = $this->db->query("select *
+                               from imagenes i join usuarios u on (i.usuarios_id = u.id)
+                              where nsfw = 'f'
+                               order by fecha_subida
+                               limit 20");
+
+    $imagenes = $res->result_array();
+    $this->tabla = $this->db->query('select * from categorias')->result_array();
+    $categorias = $this->arbol(NULL);
+    $lista_cat = '<ul class="side-nav">' . $this->listar_categorias($categorias) . '</ul>';
+
+    $data['titulo']     = 'Inicio';
+    $data['imagenes']   = $imagenes;
+    $data['categorias'] = $lista_cat;
+
+    $this->template->load('plantillas/comun', 'home', $data);
   }
 
-  public function login(){
-    $reglas = array(
-                array(
-                  'field' => 'nick',
-                  'label' => 'Nick',
-                  'rules' => 'trim|required|max_length[20]'
-                ),
-                array(
-                  'field' => 'pass',
-                  'label' => 'Pass',
-                  'rules' => 'trim|required'
-                )
-              );
+  public function listar_categorias($categorias){
+    $lista = '';
 
-    $this->form_validation->set_rules($reglas);
+    foreach ($categorias as $key => $value):
+      if (is_numeric($key)):
+        $lista .= '<ul>';
+        $lista .= $this->listar_categorias($value);
+        $lista .= '</ul>';
+      else:
+        $lista .= '<li class="categoria" value="'.$value.'" role="menuitem">'.$key.'</li>';
+      endif;
+    endforeach;
 
-    if($this->form_validation->run()){
-      if($this->input->post('enviar')){
-        $nick = $this->input->post('nick');
-        $pass = $this->input->post('pass');
+    return $lista;
+  }
 
-        $this->loguear($nick, $pass);
-      }
-    }else{
-      $this->load->view('login');
+  public function arbol($padre_id){
+    $res = array_filter($this->tabla, function ($e) use ($padre_id){
+      return $e['padre_id'] == $padre_id;
+    });
+
+    if (count($res) == 0) return [];
+    $arbol = [];
+
+    foreach ($res as $hijo){
+      $arbol[$hijo['nombre_cat']] = $hijo['id'];
+      $hijos   = $this->arbol($hijo['id']);
+      if ($hijos != []) $arbol[] = $hijos;
     }
-  }
 
-  public function loguear($nick, $pass){
-    $res = $this->db->query('select *
-                               from usuarios
-                              where nick = ? and pass = md5(?)',
-                            [$nick, $pass]);
-    
-    if($res->num_rows() > 0){
-      $usuario = new Usuario($nick);
-
-      $id = $res->result_array()[0]['id'];
-      $this->session->set_userdata('nick', $nick);
-      $this->session->set_userdata('usuario', $usuario);
-      $this->session->set_userdata('id', $id);
-      $this->load->view('home');
-    }else{
-      $data['errores'][] = 'El usuario no existe';
-      $this->load->view('login', $data);
-    }
-  }
-
-  public function logout(){
-    $this->session->sess_destroy();
-    redirect('inicio');
-  }
+    return $arbol;
+  } 
 }
