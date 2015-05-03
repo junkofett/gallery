@@ -64,6 +64,7 @@ drop table if exists imagenes cascade;
 
 create table imagenes(
   id                bigserial     constraint pk_imagenes primary key,
+  titulo            varchar(100)  ,
   img_url           varchar(200)  not null,
   usuarios_id       bigint        constraint fk_imagenes_usuarios_id
                                       references usuarios(id) on delete no action

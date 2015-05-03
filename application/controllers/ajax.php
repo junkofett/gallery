@@ -1,27 +1,23 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Ajax extends CI_Controller {
-  public function lista_categorias($id){
-    $categorias = $this->obtener_categorias($id);
 
-    $lista = '<ul>';
+  public function imgs_por_cat($id){
+    $stmt       = "select nombre_cat, id from categorias where id = ?";
+    $primer     = $this->db->query($stmt, [$id])->row_array();
 
-    foreach ($categorias as $categoria) {
-      if($categoria['id'] != '0'):
-        $lista .= "<li class='categoria' role='menuitem'>
-                    <input type='hidden' value='".$categoria['id']."' />".
-                            $categoria['nombre_cat'].'</li>';
-      endif;
+    $arbol = $this->Imagen->arbol($id);
+    array_unshift($arbol, [$primer['nombre_cat'] => $primer['id'] ]);
+
+    $unnested = $this->Imagen->unnest($arbol, []);
+
+    $where = 'where ';
+
+    foreach ($unnested as $cat_id) {
+      $where .= ($where != 'where ') ? ' OR ' : '';
+      $where .= 'categorias_id = '.$cat_id.' ';
     }
 
-    $lista .= '</ul>';
-
-    echo $lista;
-  }
-
-  public function obtener_categorias($id){
-    $res = $this->db->query('select * from categorias where padre_id = ?', [$id])
-                    ->result_array();
-    return (count($res) != 0) ? $res : FALSE;
+    echo json_encode($unnested);
   }
 }

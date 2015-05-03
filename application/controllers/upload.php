@@ -10,7 +10,9 @@ class Upload extends CI_Controller {
 
   function index()
   {
-    $this->load->view('upload_form', array('error' => ' ' ));
+    $data['categorias'] = $this->Imagen->categorias;
+    $data['error'] = ' ';
+    $this->load->view('forms/uploadimg', $data);
   }
 
   function do_upload()
@@ -23,16 +25,17 @@ class Upload extends CI_Controller {
     }
 
     $descripcion = $this->input->post('descripcion');
-    $titulo = $this->input->post('titulo');
-    $nsfw = ($this->input->post('nsfw') != NULL) ? 't' : 'f';
-    $userid = $this->input->post('id');
+    $titulo      = $this->input->post('titulo');
+    $categoria   = $this->input->post('categoria');
+    $nsfw        = ($this->input->post('nsfw') != NULL) ? 't' : 'f';
+    $userid      = $this->input->post('id');
     
     $nombreimg = $nick . md5($nick . $titulo . time());
 
-    $config['upload_path'] = './'.$userfolder;
+    $config['upload_path']   = './'.$userfolder;
     $config['allowed_types'] = 'gif|jpg|png';
-    $config['file_name'] = $nombreimg;
-    $config['max_size'] = '100000';
+    $config['file_name']     = $nombreimg;
+    $config['max_size']      = '100000';
 
     $this->load->library('upload', $config);
     $imagen = 'imagen';
@@ -45,9 +48,17 @@ class Upload extends CI_Controller {
     }
     else
     {
+      $insert = array(
+         'img_url'         => $userfolder.'/'.$nombreimg,
+         'titulo'          => $titulo,
+         'categorias_id'   => $categoria,
+         'usuarios_id'     => $userid,
+         'descripcion_img' => $descripcion,
+         'nsfw'            => $nsfw
+      );
 
-    $this->db->query('insert into imagenes (img_url, usuarios_id, descripcion_img, nsfw)
-                      values (?, ?, ?, ?)', [$userfolder.'/'.$nombreimg, $userid, $descripcion, $nsfw]);
+      $this->Imagen->anadir_imagen($insert); 
+      
       $data = array('upload_data' => $this->upload->data());
 
       $this->load->view('home', $data);

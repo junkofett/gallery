@@ -39,7 +39,9 @@
   </header>
   <div class='row'>
     <aside class='large-2 columns'>
-      <?= $categorias ?>
+      <ul class="side-nav">
+        <?= $categorias ?>
+      </ul>
     </aside>
     <div class='large-10 columns'>
       <?= $contents ?>
@@ -53,7 +55,17 @@
     $(document).foundation();
 
     $('.categoria').on('click', function (event){
-      console.log(event);
+      var ev = $(this);
+
+      //console.log(ev.find('input').val());
+
+      $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.find('input').val(),
+        {'<?= $this->security->get_csrf_token_name(); ?>' : 
+         '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+          //et.append(data);
+          console.log(data);
+      });
+
     });
 
     /*$( document ).on( "click", ".categoria", function() {     
