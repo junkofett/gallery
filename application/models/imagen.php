@@ -24,23 +24,29 @@ class Imagen extends CI_Model{
   }
 
   public function anadir_imagen($insert){
-    if(isset($insert['hashtags'])):
-      $hashtags = $insert['hashtags'];
-      unset($insert['hashtags']);
+    if(isset($insert['etiquetas'])):
+      $hashtags = $insert['etiquetas'];
+      unset($insert['etiquetas']);
     endif;
 
     $this->db->insert('imagenes', $insert);
 
-    /*$this->db->query('insert into imagenes (img_url, titulo, categorias_id, usuarios_id, descripcion_img, nsfw)
-                      values (?, ?, ?, ?, ?, ?)', [$userfolder.'/'.$nombreimg,
-                                                  $titulo, $categoria, $userid, 
-                                                          $descripcion, $nsfw]);
-      */
+    if(isset($hashtags)):
+      $img_id  = $this->db->insert_id();
+      $hashs   = $this->Etiqueta->preg_split_hashs($hashtags);
 
-    if(isset($hashtags))
-      $id = $this->db->insert_id();
+      foreach ($hashs as $hash):
+        $hash    = substr($hash, 1);
+        $hash_id = $this->Etiqueta->check_and_add_hashtag($hash);
+        $this->relacionar_hash($hash_id, $img_id);
+      endforeach;
 
+    endif;
+  }
 
+  public function relacionar_hash($hash_id, $img_id){
+    $this->db->insert('imgs_etiquetas', ['imagenes_id'  => $img_id,
+                                         'etiquetas_id' => $hash_id]);
   }
 
   public function arbol($padre_id){

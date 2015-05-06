@@ -5,15 +5,12 @@
     <?= form_upload(['name' => 'imagen']) ?> <br>
     <?= form_label('Titulo', 'titulo') ?>
     <?= form_input(['name' => 'titulo']) ?> <br>
-    <?php foreach ($categorias as $cat){ ?>
-        <?= form_label($cat['nombre_cat'], $cat['nombre_cat']) ?>
-        <?= form_radio(['value' => $cat['id'],
-                        'name'  => 'categoria']) ?>
-        <br>
-    <?php } ?>
+    <?= $categorias ?>
     <br>
     <?= form_label('Descripción', 'descripcion') ?>
     <?= form_input(['name' => 'descripcion']) ?> <br>
+    <?= form_label('Etiquetas', 'etiquetas') ?>
+    <?= form_input(['name' => 'etiquetas']) ?>
     <?= form_label('Contenido Adulto', 'nsfw') ?>
     <?= form_checkbox('nsfw', 'nsfw');?> <br>
     <?= form_submit('subir', 'Subir') ?>

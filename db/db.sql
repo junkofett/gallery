@@ -47,7 +47,8 @@ drop table if exists etiquetas cascade;
 
 create table etiquetas(
   id          bigserial       constraint pk_etiquetas primary key,
-  nombre_et   varchar(50)     not null
+  nombre_et   varchar(24)     not null 
+                              constraint uq_etiqetas_nombre_et unique
 );
 
 drop table if exists categorias cascade;
@@ -65,7 +66,8 @@ drop table if exists imagenes cascade;
 create table imagenes(
   id                bigserial     constraint pk_imagenes primary key,
   titulo            varchar(100)  ,
-  img_url           varchar(200)  not null,
+  img_url           text          not null,
+  thumb_url         text          not null,
   usuarios_id       bigint        constraint fk_imagenes_usuarios_id
                                       references usuarios(id) on delete no action
                                       on update cascade,
