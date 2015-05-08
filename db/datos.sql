@@ -101,14 +101,15 @@ insert into usuarios (nick, pass, email, descripcion_usr, fecha_nac)
   to_timestamp('03 06 1984', 'DD MM YYYY')),
 
   ('lavemer', md5('lavemer'), 'lavemer@mixmail.com', NULL,
-  to_timestamp('30 09 1970', 'DD MM YYYY'));
+  to_timestamp('30 09 1970', 'DD MM YYYY')),
+
+  ('patrickbrown', md5('patrickbrown'), 'patrick@brown.com', NULL,
+  to_timestamp('13 06 1992', 'DD MM YYYY'));
 
 --BLOQUE CATEGORIAS
 insert into categorias (id, nombre_cat, padre_id)
-      values(0, 'ROOT', 0);
-insert into categorias (id, nombre_cat, padre_id)
-      values(1,'Digital', 0),
-            (2,'Tradicional', 0),
+      values(1,'Digital', NULL),
+            (2,'Tradicional', NULL),
             (3,'2D', 1),
             (4,'3D', 1),
             (5,'Paisajes', 3),

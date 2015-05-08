@@ -25,7 +25,7 @@
               <a href="#"><?= $this->session->userdata('nick') ?></a>
               <ul class="dropdown">
                 <li><a href="#">Editar Perfil</a></li>
-                <li><a href="#">Subir Imagen</a></li>
+                <li><?= anchor('upload', 'Subir Imagen') ?></li>
                 <li><?= anchor('usuarios/logout', 'Logout') ?></li>
               </ul>
             </li>

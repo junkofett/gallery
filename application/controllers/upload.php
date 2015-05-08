@@ -33,14 +33,17 @@ class Upload extends CI_Controller {
     $nsfw        = ($this->input->post('nsfw') != NULL) ? 't' : 'f';
     $userid      = $this->input->post('id');
 
-    if (isset($this->input->post('etiquetas'))):
-      $etiquetas = $this->input->post('etiquetas')
+    if ($this->input->post('etiquetas') != NULL):
+      $etiquetas = $this->input->post('etiquetas');
     endif;
 
-    $md5 = md5($nick . $titulo . time());
-
-    $nombreimg = $nick .'-'. $titulo . substr($md5, 0, 6) . substr($md5, -0, 6);
-
+    $md5 = md5(rand() . $nick . $titulo . time());
+    
+    $nombreimg = $nick .'-'. 
+                  strtolower(
+                    str_replace(' ', '',$titulo)
+                  ) .
+                substr($md5, 0, 4) . substr($md5, count($md5) * (-4), 4);
     $config['upload_path']   = './'.$userfolder;
     $config['allowed_types'] = 'gif|jpg|png';
     $config['file_name']     = $nombreimg;
@@ -67,8 +70,8 @@ class Upload extends CI_Controller {
 
       $insert = array(
          'img_url'         => $userfolder.'/'.$nombreimg.$ext,
-         'thumb_url'       => $userfolder.'/'.$nombreimg.'_thumb'.$ext
-         'titulo'          => $titulo
+         'thumb_url'       => $userfolder.'/'.$nombreimg.'_thumb'.$ext,
+         'titulo'          => $titulo,
          'categorias_id'   => $categoria,
          'usuarios_id'     => $userid,
          'descripcion_img' => $descripcion,
@@ -92,7 +95,7 @@ class Upload extends CI_Controller {
       $this->image_lib->resize();
 
       $data = array('upload_data' => $this->upload->data());
-      $this->load->view('home', $data);
+      redirect('inicio');
     }
   }
 }

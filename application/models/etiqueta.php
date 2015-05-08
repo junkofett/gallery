@@ -7,7 +7,7 @@ class Etiqueta extends CI_Model{
 
   public function preg_split_hashs($cadena){
     $expr     = "/(#\w{1,24})\b/";
-    $division = preg_split($expr, $mensaje, null, PREG_SPLIT_DELIM_CAPTURE);
+    $division = preg_split($expr, $cadena, null, PREG_SPLIT_DELIM_CAPTURE);
 
     return preg_grep($expr, $division);
   }

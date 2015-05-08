@@ -1,3 +1,5 @@
 .row{min-width: 100%;}
 
 .categoria{cursor: pointer;}
+
+li ul{list-style-type: none;}

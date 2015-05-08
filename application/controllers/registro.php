@@ -32,8 +32,8 @@ class Registro extends CI_Controller {
       $this->form_validation->set_rules($reglas);
 
       if($this->form_validation->run()):
-        $res = $this->db->query('insert into usuarios (nick, pass)
-                                 values (?, md5(?))', [$nick, $pass]);
+        $res = $this->db->insert('usuarios', ['nick' => $nick, 
+                                              'pass' => md5($pass)]);
 
         $this->session->set_userdata('usuario', new Usuario($nick));
         $this->session->set_userdata('nick', $nick);
