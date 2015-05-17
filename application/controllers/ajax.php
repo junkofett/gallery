@@ -18,6 +18,11 @@ class Ajax extends CI_Controller {
       $where .= 'categorias_id = '.$cat_id.' ';
     }
 
-    echo json_encode($unnested);
+    $data['imagenes'] = $this->db->query('select * 
+                               from imagenes i join usuarios u on (i.usuarios_id = u.id) '.$where)->result_array();
+
+    echo $this->load->view('home', $data);
+
+    //echo json_encode($imgs);
   }
 }

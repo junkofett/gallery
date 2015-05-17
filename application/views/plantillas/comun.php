@@ -39,11 +39,11 @@
   </header>
   <div class='row'>
     <aside class='large-2 columns'>
-      <ul class="side-nav">
+      <ul class="mtree side-nav" data-accordion>
         <?= $categorias ?>
       </ul>
     </aside>
-    <div class='large-10 columns'>
+    <div class='large-10 columns' id='contents'>
       <?= $contents ?>
     </div>
   </div>
@@ -51,43 +51,28 @@
   <?= link_tag('css/general.css') ?>
   <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
   <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
+  <script type="text/javascript" src=<?= base_url().'js/mtree.js'?>></script>
   <script type="text/javascript">
     $(document).foundation();
 
-    $('.categoria').on('click', function (event){
+    /*$('.categoria').on('click', function (event){
       var ev = $(this);
-
-      //console.log(ev.find('input').val());
 
       $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.find('input').val(),
         {'<?= $this->security->get_csrf_token_name(); ?>' : 
          '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
           //et.append(data);
-          console.log(data);
+          $('.clearing-thumbs').remove();
+          $('#contents').append(data);
       });
 
-    });
+      //ev.parent('li').next('ul').find('.content').toogleClass('active').slideToggle("slow");
 
-    /*$( document ).on( "click", ".categoria", function() {     
-      var et = $(this);
-      
-      $.post("<?= base_url() . 'index.php/ajax/lista_categorias/' ?>"+ et.find('input').val(),
-        {'<?= $this->security->get_csrf_token_name(); ?>' : 
-         '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
-          et.append(data);
-      });
     });*/
 
-    /*$('li').on('click', function(){
-      var et = $(this);
-
-      console.log(et);
-
-      $.post("<?= base_url() . 'index.php/ajax/lista_categorias/' ?>"+ et.find('input').val(),
-        {'<?= $this->security->get_csrf_token_name(); ?>' : 
-         '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
-          et.append(data);
-      });
+   /*$(".accordion-navigation").on("click", function (event) {
+     $("li.active").find(".content").slideToggle("slow");
+     $(this).find(".content").slideToggle("slow");
     });*/
   </script>
 </body>

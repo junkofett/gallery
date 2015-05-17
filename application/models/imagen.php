@@ -49,7 +49,7 @@ class Imagen extends CI_Model{
                                          'etiquetas_id' => $hash_id]);
   }
 
-  public function arbol($padre_id){
+  public function arboles($padre_id){
     $res = array_filter($this->categorias, function ($e) use ($padre_id){
       return $e['padre_id'] == $padre_id;
     });
@@ -59,9 +59,30 @@ class Imagen extends CI_Model{
 
     foreach ($res as $hijo):
       $arbol[$hijo['nombre_cat']] = $hijo['id'];
-      $hijos   = $this->arbol($hijo['id']);
-      if ($hijos != []) $arbol[] = $hijos;
+      $hijos = $this->arbol($hijo['id']);
+      if ($hijos != []) $arbol[$hijo['nombre_cat']]['s'] = $hijos;
     endforeach;
+
+    return $arbol;
+  }
+
+  public function arbol($padre_id){
+    $res = array_filter($this->categorias, function ($e) use ($padre_id){
+      return $e['padre_id'] == $padre_id;
+    });
+
+    $res = array_values($res);
+
+    if (count($res) == 0) return [];
+
+    for ($i = 0; $i < count($res); $i++):
+      $arbol[$i]['id']         = $res[$i]['id'];
+      $arbol[$i]['nombre_cat'] = $res[$i]['nombre_cat'];
+      $arbol[$i]['padre_id']   = $res[$i]['padre_id'];
+      $hijos = $this->arbol($res[$i]['id']);
+
+      if ($hijos != []) $arbol[$i]['subcats'] = $hijos;
+    endfor;
 
     return $arbol;
   }
