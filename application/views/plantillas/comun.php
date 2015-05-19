@@ -39,7 +39,7 @@
   </header>
   <div class='row'>
     <aside class='large-2 columns'>
-      <ul class="mtree side-nav" data-accordion>
+      <ul class="accordion side-nav" data-accordion>
         <?= $categorias ?>
       </ul>
     </aside>
@@ -51,7 +51,6 @@
   <?= link_tag('css/general.css') ?>
   <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
   <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
-  <script type="text/javascript" src=<?= base_url().'js/mtree.js'?>></script>
   <script type="text/javascript">
     $(document).foundation();
 
