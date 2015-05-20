@@ -3,6 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <title><?=$titulo?></title>
+  <style type="text/css">
+    #cat-menu li ul {
+    display: none;
+    background: #4a5b78;
+    }
+    #cat-menu li ul li div {
+        display: block;
+        background: none;
+        padding: 10px 0px;
+        padding-left: 30px;
+        font-size: 1.1em;
+        text-decoration: none;
+        font-weight: bold;
+        color: #e3e7f1;
+        text-shadow: 1px 1px 0px #000;
+    }
+    #cat-menu li ul li div:hover {
+        background: #394963;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -39,7 +59,7 @@
   </header>
   <div class='row'>
     <aside class='large-2 columns'>
-      <ul class="accordion side-nav" data-accordion>
+      <ul id="cat-menu">
         <?= $categorias ?>
       </ul>
     </aside>
@@ -68,11 +88,13 @@
       //ev.parent('li').next('ul').find('.content').toogleClass('active').slideToggle("slow");
 
     });*/
+  $("#cat-menu div").on("click", function (e) {
 
-   /*$(".accordion-navigation").on("click", function (event) {
-     $("li.active").find(".content").slideToggle("slow");
-     $(this).find(".content").slideToggle("slow");
-    });*/
+    if ($(this).parent().has("ul")) {
+        e.preventDefault();
+    }
+    $(this).next('ul').slideToggle();
+  });
   </script>
 </body>
 </html>

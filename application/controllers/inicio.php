@@ -24,26 +24,15 @@ class Inicio extends CI_Controller {
     $lista = '';
 
     foreach ($categorias as $categoria):
-      $lista .= '<li class="categoria accordion-navigation">
-                    <input type="hidden" value="'.$categoria['id'].'"/>
-                    <a href="#panel'.$categoria['id'].$categoria['padre_id'].'">'
-                      .$categoria['nombre_cat'].'</a>';
-    
-
-      $lista .= '<div id="panel'.$categoria['id'].$categoria['padre_id'].'" class="content';
-
-      if($categoria['padre_id'] == NULL)
-        $lista .= ' active">';
-      else
-        $lista .='">';
+      $lista .= '<li class="menu-cat">
+                  <input type="hidden" value="'.$categoria['id'].'"/>
+                  <div>'.$categoria['nombre_cat'].'</div>';
 
       if (isset($categoria['subcats'])):
-        $lista .= '<ul class="accordion">';
+        $lista .= '<ul class="cataccordion">';
         $lista .= $this->listar_categorias($categoria['subcats']);
         $lista .= '</ul>';
       endif;
-
-      $lista .= '</div>';
 
       $lista .= '</li>';
     endforeach;
