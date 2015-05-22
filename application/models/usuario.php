@@ -4,12 +4,10 @@ class Usuario extends CI_Model{
   public function __construct($nick = NULL){
     parent::__construct();
 
-    if($nick != NULL){
-      $res = $this->db->query('select *
-                                 from usuarios
-                                where nick = ?', [$nick]);
+    if($nick != NULL):
+      $res = $this->db->get_where('usuarios',['nick' => $nick]);
 
-      if($res->num_rows() > 0){
+      if($res->num_rows() > 0):
         $fila = $res->row_array();
 
         foreach ($fila as $key => $value):
@@ -17,11 +15,11 @@ class Usuario extends CI_Model{
         endforeach;
 
         return $this;        
-      }else{
+      else:
         return FALSE;
-      }
-    }else{
+      endif;
+    else:
       return FALSE;
-    }
+    endif;
   }
 }

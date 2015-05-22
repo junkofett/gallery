@@ -89,10 +89,19 @@
 
     });*/
   $("#cat-menu div").on("click", function (e) {
+    var ev = $(this);
 
-    if ($(this).parent().has("ul")) {
-        e.preventDefault();
+    $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.prev('input').val(),
+      {'<?= $this->security->get_csrf_token_name(); ?>' : 
+       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        $('.clearing-thumbs').remove();
+        $('#contents').append(data);
+    });
+
+    if ($(this).parent().has("ul")){
+      e.preventDefault();
     }
+
     $(this).next('ul').slideToggle();
   });
   </script>

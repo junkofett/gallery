@@ -23,6 +23,22 @@ class Imagen extends CI_Model{
     return $res;
   }
 
+  public function imgs_by_user($id){
+    $this->db->from('imagenes');
+    $this->db->join('usuarios', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->where('nsfw', 'f', 20, 0);
+    $this->db->where('usuarios_id', $id);
+    $this->db->order_by('fecha_subida', 'desc');
+    $res = $this->db->get();
+    //$res = $this->db->get_where('imagenes', ['usuarios_id' => $id]);
+
+    if($res->num_rows() > 0):
+      return $res->result_array();
+    else:
+      return FALSE;
+    endif;
+  }
+
   public function anadir_imagen($insert){
     if(isset($insert['etiquetas'])):
       $hashtags = $insert['etiquetas'];
@@ -49,23 +65,6 @@ class Imagen extends CI_Model{
                                          'etiquetas_id' => $hash_id]);
   }
 
-  public function arboles($padre_id){
-    $res = array_filter($this->categorias, function ($e) use ($padre_id){
-      return $e['padre_id'] == $padre_id;
-    });
-
-    if (count($res) == 0) return [];
-    $arbol = [];
-
-    foreach ($res as $hijo):
-      $arbol[$hijo['nombre_cat']] = $hijo['id'];
-      $hijos = $this->arbol($hijo['id']);
-      if ($hijos != []) $arbol[$hijo['nombre_cat']]['s'] = $hijos;
-    endforeach;
-
-    return $arbol;
-  }
-
   public function arbol($padre_id){
     $res = array_filter($this->categorias, function ($e) use ($padre_id){
       return $e['padre_id'] == $padre_id;
@@ -87,15 +86,13 @@ class Imagen extends CI_Model{
     return $arbol;
   }
 
-  public function unnest($array, $return){
-    foreach($array as $key => $value):
-      if(is_array($array[$key])):
-        $return = $this->unnest($array[$key], $return);
-      else:
-        if(isset($array[$key])):
-          $return[] = $array[$key];
-        endif;
+  public function unnest($arrays, $return){
+    foreach($arrays as $array):
+      if(isset($array['subcats'])):
+        $return = $this->unnest($array['subcats'], $return);
       endif;
+
+      $return[] = $array['id'];
     endforeach;
 
     return $return;

@@ -3,26 +3,38 @@
 class Ajax extends CI_Controller {
 
   public function imgs_por_cat($id){
-    $stmt       = "select nombre_cat, id from categorias where id = ?";
-    $primer     = $this->db->query($stmt, [$id])->row_array();
+    $primer = $this->db->get_where('categorias', ['id' => $id])->row_array();
+    $arbol  = $this->Imagen->arbol($id);
 
-    $arbol = $this->Imagen->arbol($id);
-    array_unshift($arbol, [$primer['nombre_cat'] => $primer['id'] ]);
+    array_unshift($arbol, ['id'         => $primer['id'],
+                           'nombre_cat' => $primer['nombre_cat'],
+                           'padre_id'   => $primer['padre_id'] ]);
 
     $unnested = $this->Imagen->unnest($arbol, []);
 
-    $where = 'where ';
+    $this->db->from('imagenes');
+    $this->db->join('usuarios', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->where('nsfw', 'f', 20, 0);
 
-    foreach ($unnested as $cat_id) {
-      $where .= ($where != 'where ') ? ' OR ' : '';
-      $where .= 'categorias_id = '.$cat_id.' ';
-    }
+    foreach ($unnested as $key => $value):
+      if($key > 0):
+        $this->db->or_where('categorias_id =', $value);
+      else:
+        $this->db->where('categorias_id =', $value);
+      endif;
+    endforeach;
 
-    $data['imagenes'] = $this->db->query('select * 
-                               from imagenes i join usuarios u on (i.usuarios_id = u.id) '.$where)->result_array();
+    $this->db->order_by('fecha_subida', 'desc');
+    $data['imagenes'] = $this->db->get()->result_array();
 
-    echo $this->load->view('home', $data);
+    $this->load->view('galeria', $data);
+  }
 
-    //echo json_encode($imgs);
+  public function imgs_by_user($nick){
+    $usuario = new Usuario($nick);
+    $data['imagenes'] = $this->Imagen->imgs_by_user($usuario->id);
+    $data['nick']     = $usuario->nick;
+
+    $this->load->view('galeria', $data);
   }
 }

@@ -54,4 +54,16 @@ class Usuarios extends CI_Controller {
     $this->session->sess_destroy();
     redirect('inicio');
   }
+
+  public function perfil($nick){
+    $usuario = new Usuario($nick);
+    
+    $head['titulo'] = $usuario->nick;
+    $data['nick']   = $usuario->nick;
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header');
+    $this->load->view('usuario/usuario', $data);
+    $this->load->view('comunes/recursos');
+  }
 }
