@@ -3,8 +3,8 @@
 class Inicio extends CI_Controller {
 
   public function index(){
-    $this->db->from('imagenes');
-    $this->db->join('usuarios', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->from('usuarios');
+    $this->db->join('imagenes', 'imagenes.usuarios_id = usuarios.id');
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
@@ -17,9 +17,10 @@ class Inicio extends CI_Controller {
     $galeria['imagenes'] = $imagenes;
     $data['categorias']  = $lista_cat;
     $data['contents']    = $this->load->view('galeria', $galeria, TRUE);
+    $header['menu_opt']  = $this->load->view('forms/login', [], TRUE);
 
     $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header');
+    $this->load->view('comunes/header', $header);
     $this->load->view('comunes/home', $data);
     $this->load->view('comunes/recursos');
     //$this->template->load('plantillas/comun', 'galeria', $data);

@@ -31,10 +31,14 @@ class Usuarios extends CI_Controller {
   }
 
   public function loguear($nick, $pass){
-    $res = $this->db->query('select *
+    /*$res = $this->db->query('select *
                                from usuarios
                               where nick = ? and pass = md5(?)',
-                            [$nick, $pass]);
+                            [$nick, $pass]);*/
+    $this->db->from('usuarios');
+    $this->db->where('nick', $nick);
+    $this->db->where('pass', md5($pass));
+    $res = $this->db->get();
     
     if($res->num_rows() > 0){
       $usuario = new Usuario($nick);
@@ -55,11 +59,56 @@ class Usuarios extends CI_Controller {
     redirect('inicio');
   }
 
+  public function registro(){
+    $this->load->view('forms/registro');
+  }
+
+  public function registrar(){
+    if($this->input->post('registrarse')):
+      $reglas = array(
+                  array(
+                    'field' => 'nick',
+                    'label' => 'Nick',
+                    'rules' => 'trim|required|max_length[20]|is_unique[usuarios.nick]'
+                  ),
+                  array(
+                    'field' => 'pass',
+                    'label' => 'Pass',
+                    'rules' => 'trim|required|matches[passconf]'
+                  ),
+                  array(
+                    'field' => 'passconf',
+                    'label' => 'Confirma Pass',
+                    'rules' => 'trim|required'
+                  )
+                );
+
+      $nick = $this->input->post('nick');
+      $pass = $this->input->post('pass');
+
+      $this->form_validation->set_rules($reglas);
+
+      if($this->form_validation->run()):
+        $res = $this->db->insert('usuarios', ['nick' => $nick, 
+                                              'pass' => md5($pass)]);
+
+        $this->session->set_userdata('usuario', new Usuario($nick));
+        $this->session->set_userdata('nick', $nick);
+        redirect('inicio');
+      else:
+        $this->load->view('registro');
+      endif;
+    endif;
+  }
+
   public function perfil($nick){
     $usuario = new Usuario($nick);
     
-    $head['titulo'] = $usuario->nick;
-    $data['nick']   = $usuario->nick;
+    $head['titulo']          = $usuario->nick;
+    $data['nick']            = $usuario->nick;
+    $data['descripcion_usr'] = $usuario->descripcion_usr;
+    $data['email']           = $usuario->email;
+    $data['fecha_nac']       = $usuario->fecha_nac;
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header');

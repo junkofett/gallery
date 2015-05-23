@@ -18,13 +18,19 @@
               <a href="#"><?= $this->session->userdata('nick') ?></a>
               <ul class="dropdown">
                 <li><a href="#">Editar Perfil</a></li>
-                <li><?= anchor('upload', 'Subir Imagen') ?></li>
+                <li><?= anchor('imagenes/upload', 'Subir Imagen') ?></li>
                 <li><?= anchor('usuarios/logout', 'Logout') ?></li>
               </ul>
             </li>
           <?php else: ?>
-            <li><?= anchor('usuarios/login', 'Login') ?></li>
-            <li class="hide">prueba</li>
+            <li class="has-dropdown">
+              <a href="#">Login</a>
+              <ul class="dropdown">
+                <li>
+                  <?= $menu_opt ?>
+                </li>
+              </ul>  
+            </li>
           <?php endif; ?>
       </ul>
     </section>

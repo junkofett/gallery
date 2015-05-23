@@ -1,21 +1,19 @@
 <?php
 
 class Upload extends CI_Controller {
-
-  function __construct()
-  {
-    parent::__construct();
-    $this->load->helper(array('form', 'url'));
-  }
-
   function index()
   {
     $categorias = $this->Imagen->arbol(NULL);
     $data['categorias'] = '<ul>'.
                             $this->Imagen->radio_categorias($categorias) . 
                           '</ul>';
-    $data['error'] = ' ';
+    $data['error']  = ' ';
+    $head['titulo'] = 'Subir Imagen';
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header');
     $this->load->view('forms/uploadimg', $data);
+    $this->load->view('comunes/recursos');
   }
 
   function do_upload()
@@ -51,14 +49,11 @@ class Upload extends CI_Controller {
 
     $this->load->library('upload', $config);
 
-    if ( ! $this->upload->do_upload('imagen'))
-    {
+    if ( ! $this->upload->do_upload('imagen')):
       $error = array('error' => $this->upload->display_errors());
 
       $this->load->view('upload_form', $error);
-    }
-    else
-    {
+    else:
       $ext = $this->upload->data()['file_ext'];
 
       $configcopy['source_image'] = './'.$userfolder.'/'.$nombreimg;
@@ -96,6 +91,6 @@ class Upload extends CI_Controller {
 
       $data = array('upload_data' => $this->upload->data());
       redirect('inicio');
-    }
+    endif;
   }
 }

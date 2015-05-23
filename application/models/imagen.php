@@ -18,14 +18,19 @@ class Imagen extends CI_Model{
   }
 
   public function img_por_id($id){
-    $res = $this->db->get_where('imagenes', ['id' => $id])
+    $this->db->from('usuarios u');
+    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+    $this->db->where('nsfw', 'f', 20, 0);
+    $this->db->where('i.id', $id);
+    $this->db->order_by('fecha_subida', 'desc');
+    $res = $this->db->get()
                     ->row_array();
     return $res;
   }
 
   public function imgs_by_user($id){
-    $this->db->from('imagenes');
-    $this->db->join('usuarios', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->from('usuarios u');
+    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->where('usuarios_id', $id);
     $this->db->order_by('fecha_subida', 'desc');
@@ -101,17 +106,18 @@ class Imagen extends CI_Model{
   public function radio_categorias($categorias){
     $radios = '';
 
-    foreach ($categorias as $key => $value):
-      if (is_numeric($key)):
+    foreach ($categorias as $cat):
+      $radios .= '<li>'.
+                    form_radio(['value' => $cat['id'],
+                                'name'  => 'categoria']) . $cat['nombre_cat'];
+      
+      if(isset($cat['subcats'])):
         $radios .= '<ul>';
-        $radios .= $this->radio_categorias($value);
+        $radios .= $this->radio_categorias($cat['subcats']);
         $radios .= '</ul>';
-      else:
-        $radios .= '<li>'.
-                      form_radio(['value' => $value,
-                                  'name'  => 'categoria']) . $key .
-                    '</li>';
       endif;
+
+      $radios .= '</li>';
     endforeach;
 
     return $radios;
