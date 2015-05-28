@@ -14,6 +14,7 @@
       <li class="tab-title"><a href="#panel4">Tab 4</a></li>
     </ul>
     <div class="tabs-content">
+      <?= $imagenes ?>
     </div>
   </div>
 </div>

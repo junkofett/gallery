@@ -1,9 +1,18 @@
 <?= link_tag('css/foundation.css') ?>
 <?= link_tag('css/general.css') ?>
+<?= link_tag('js/raty/jquery.raty.css') ?>
 <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
+<script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
 <script type="text/javascript">
   $(document).foundation();
+  
+  $('.raty').raty({
+    path: "<?= base_url().'js/raty/images'?>",
+    score: function() {
+      return $(this).attr('data-score');
+    }
+  })
 
   $("#cat-menu div").on("click", function (e) {
     var ev = $(this);
@@ -30,6 +39,23 @@
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
         //$('.clearing-thumbs').remove();
         $('.tabs-content').append(data);
+    });
+  });
+
+  $('.raty').on('click', function(e){
+    var ev     = $(this);
+    var puntos = ev.find('input').val();
+    var id     = $('#img_id').val();
+
+    $.post("<?= base_url() . 'index.php/imagenes/puntuar/' ?>"+
+                            id+"/"+ev.find('input').val(),
+      {'<?= $this->security->get_csrf_token_name(); ?>' : 
+       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        //$('.clearing-thumbs').remove();
+          //ev.removeAttr('data-score');
+          //ev.attr('data-score', data);
+          console.log(data);
+
     });
   });
 </script>

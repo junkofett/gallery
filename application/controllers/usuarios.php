@@ -26,27 +26,21 @@ class Usuarios extends CI_Controller {
         $this->loguear($nick, $pass);
       }
     }else{
-      $this->load->view('login');
+      redirect('inicio');
     }
   }
 
   public function loguear($nick, $pass){
-    /*$res = $this->db->query('select *
-                               from usuarios
-                              where nick = ? and pass = md5(?)',
-                            [$nick, $pass]);*/
     $this->db->from('usuarios');
     $this->db->where('nick', $nick);
     $this->db->where('pass', md5($pass));
     $res = $this->db->get();
-    
+
     if($res->num_rows() > 0){
       $usuario = new Usuario($nick);
-
-      $id = $usuario->id;
+      
       $this->session->set_userdata('nick', $nick);
-      $this->session->set_userdata('usuario', $usuario);
-      $this->session->set_userdata('id', $id);
+      $this->session->set_userdata('id', $usuario->id);
       redirect('inicio');
     }else{
       $data['errores'][] = 'El usuario no existe';
@@ -89,11 +83,12 @@ class Usuarios extends CI_Controller {
       $this->form_validation->set_rules($reglas);
 
       if($this->form_validation->run()):
-        $res = $this->db->insert('usuarios', ['nick' => $nick, 
-                                              'pass' => md5($pass)]);
+        $this->Usuario->registrar($nick, md5($pass));
+        
+        $usuario = new Usuario($nick);
 
-        $this->session->set_userdata('usuario', new Usuario($nick));
         $this->session->set_userdata('nick', $nick);
+        $this->session->set_userdata('id', $usuario->id);
         redirect('inicio');
       else:
         $this->load->view('registro');
@@ -103,15 +98,18 @@ class Usuarios extends CI_Controller {
 
   public function perfil($nick){
     $usuario = new Usuario($nick);
-    
+    $imgs['imagenes'] = $this->Imagen->imgs_by_user($usuario->id);
+
     $head['titulo']          = $usuario->nick;
+    $header['menu_opt']      = $this->load->view('forms/login', [], TRUE);
     $data['nick']            = $usuario->nick;
     $data['descripcion_usr'] = $usuario->descripcion_usr;
     $data['email']           = $usuario->email;
     $data['fecha_nac']       = $usuario->fecha_nac;
+    $data['imagenes']        = $this->load->view('galeria', $imgs, TRUE);
 
     $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header');
+    $this->load->view('comunes/header', $header);
     $this->load->view('usuario/usuario', $data);
     $this->load->view('comunes/recursos');
   }

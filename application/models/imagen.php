@@ -17,6 +17,32 @@ class Imagen extends CI_Model{
                     ->row_array();    
   }
 
+  public function guardar_puntuacion($img_id, $puntuacion){
+    $this->db->insert('puntuaciones', 
+                          ['usuarios_id' => $this->session->userdata('id'),
+                           'imagenes_id' => $img_id,
+                           'valoracion'  => $puntuacion]
+                        );
+  }
+
+  public function get_rate($img_id){
+    $puntuaciones = $this->db->get_where('puntuaciones', 
+                                          ['imagenes_id' => $img_id])
+                             ->result_array();
+
+    $valor = 0;
+
+    foreach ($puntuaciones as $puntuacion):
+      $valor += $puntuacion['valoracion'];  
+    endforeach;
+
+    if ($valor == 0):
+      return 0;
+    else:
+      return $valor / count($puntuaciones);
+    endif;
+  }
+
   public function img_por_id($id){
     $this->db->from('usuarios u');
     $this->db->join('imagenes i', 'i.usuarios_id = u.id');
@@ -35,7 +61,6 @@ class Imagen extends CI_Model{
     $this->db->where('usuarios_id', $id);
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
-    //$res = $this->db->get_where('imagenes', ['usuarios_id' => $id]);
 
     if($res->num_rows() > 0):
       return $res->result_array();

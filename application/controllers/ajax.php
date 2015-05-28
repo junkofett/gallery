@@ -3,9 +3,13 @@
 class Ajax extends CI_Controller {
 
   public function imgs_por_cat($id){
+    if(!$this->input->is_ajax_request()) return;
+    $id = ($id == '0') ? NULL : $id;
+
     $primer = $this->db->get_where('categorias', ['id' => $id])->row_array();
     $arbol  = $this->Imagen->arbol($id);
 
+    if($id != NULL)
     array_unshift($arbol, ['id'         => $primer['id'],
                            'nombre_cat' => $primer['nombre_cat'],
                            'padre_id'   => $primer['padre_id'] ]);
@@ -31,7 +35,9 @@ class Ajax extends CI_Controller {
   }
 
   public function imgs_by_user($nick){
+    if(!$this->input->is_ajax_request()) return;
     $usuario = new Usuario($nick);
+    
     $data['imagenes'] = $this->Imagen->imgs_by_user($usuario->id);
     $data['nick']     = $usuario->nick;
 

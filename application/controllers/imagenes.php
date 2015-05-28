@@ -1,8 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Imagenes extends CI_Controller {
-  public function editar($id){
-    $img        = $this->Imagen->img_por_id($id);
+  public function editar($img_id){
+    if(!$this->Usuario->is_owner($img_id)) redirect('inicio');
+    
+    $img        = $this->Imagen->img_por_id($img_id);
     $categorias = $this->Imagen->arbol(NULL);
     $radio_cat  = '<ul>'. $this->Imagen->radio_categorias($categorias)  . '</ul>';
 
@@ -15,10 +17,11 @@ class Imagenes extends CI_Controller {
   }
 
   public function imagen($id){
-    $data = $this->Imagen->img_por_id($id);
+    $data['imagen'] = $this->Imagen->img_por_id($id);
+    $data['rate']   = $this->Imagen->get_rate($id);
 
-    $head['titulo']      = $data['titulo'];
-    $header['menu_opt'] = $this->load->view('forms/login', [], TRUE);
+    $head['titulo']      = $data['imagen']['titulo'];
+    $header['menu_opt']  = $this->load->view('forms/login', [], TRUE);
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $header);
@@ -26,7 +29,17 @@ class Imagenes extends CI_Controller {
     $this->load->view('comunes/recursos');
   }
 
+  public function puntuar($img_id, $puntuacion){
+    if(!$this->Usuario->is_logged()) return FALSE;
+
+    $this->Imagen->guardar_puntuacion($img_id, $puntuacion);
+
+    return $this->Imagen->get_rate($img_id);
+  }
+
   public function upload(){
+    if(!$this->Usuario->is_logged()) redirect('inicio');
+
     $categorias = $this->Imagen->arbol(NULL);
     $data['categorias'] = '<ul>'.
                             $this->Imagen->radio_categorias($categorias) . 

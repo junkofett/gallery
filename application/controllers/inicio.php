@@ -8,7 +8,7 @@ class Inicio extends CI_Controller {
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
-
+    
     $imagenes   = $res->result_array();
     $categorias = $this->Imagen->arbol(NULL);
     $lista_cat  = $this->listar_categorias($categorias);
@@ -17,13 +17,17 @@ class Inicio extends CI_Controller {
     $galeria['imagenes'] = $imagenes;
     $data['categorias']  = $lista_cat;
     $data['contents']    = $this->load->view('galeria', $galeria, TRUE);
-    $header['menu_opt']  = $this->load->view('forms/login', [], TRUE);
+
+    if(!$this->session->userdata('nick')):
+      $header['menu_opt'] = $this->load->view('forms/login', [], TRUE);
+    else:
+      $header['menu_opt'] = FALSE; 
+    endif;
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $header);
     $this->load->view('comunes/home', $data);
     $this->load->view('comunes/recursos');
-    //$this->template->load('plantillas/comun', 'galeria', $data);
   }
 
   public function listar_categorias($categorias){
