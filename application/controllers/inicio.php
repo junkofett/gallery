@@ -3,13 +3,19 @@
 class Inicio extends CI_Controller {
 
   public function index(){
-    $this->db->from('usuarios');
-    $this->db->join('imagenes', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->from('usuarios u');
+    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
     
-    $imagenes   = $res->result_array();
+    $imgsnorate = $res->result_array();
+    $imagenes   = [];
+
+    foreach ($imgsnorate as $img):
+      $imagenes[] = $this->Imagen->add_rate($img);
+    endforeach;
+
     $categorias = $this->Imagen->arbol(NULL);
     $lista_cat  = $this->listar_categorias($categorias);
 

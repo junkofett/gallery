@@ -1,0 +1,15 @@
+$morao: #340245;
+$moraoclaro: #694675;
+$asu:   #456774;
+$berde: #9fb10c;
+$rosa:  #ec145a;
+
+.row{min-width: 100%;}
+
+.categoria{cursor: pointer;}
+
+li {
+  ul{list-style-type: none;}
+}
+
+.top-bar{background-color: $moraoclaro;}

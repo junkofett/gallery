@@ -1,5 +1,13 @@
-.row{min-width: 100%;}
+.row {
+  min-width: 100%; }
 
-.categoria{cursor: pointer;}
+.categoria {
+  cursor: pointer; }
 
-li ul{list-style-type: none;}
+li ul {
+  list-style-type: none; }
+
+.top-bar {
+  background-color: #694675; }
+
+/*# sourceMappingURL=general.css.map */

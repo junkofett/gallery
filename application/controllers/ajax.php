@@ -9,15 +9,16 @@ class Ajax extends CI_Controller {
     $primer = $this->db->get_where('categorias', ['id' => $id])->row_array();
     $arbol  = $this->Imagen->arbol($id);
 
-    if($id != NULL)
-    array_unshift($arbol, ['id'         => $primer['id'],
-                           'nombre_cat' => $primer['nombre_cat'],
-                           'padre_id'   => $primer['padre_id'] ]);
+    if($id != NULL):
+      array_unshift($arbol, ['id'         => $primer['id'],
+                             'nombre_cat' => $primer['nombre_cat'],
+                             'padre_id'   => $primer['padre_id'] ]);
+    endif;
 
     $unnested = $this->Imagen->unnest($arbol, []);
 
-    $this->db->from('imagenes');
-    $this->db->join('usuarios', 'imagenes.usuarios_id = usuarios.id');
+    $this->db->from('usuarios u');
+    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
     $this->db->where('nsfw', 'f', 20, 0);
 
     foreach ($unnested as $key => $value):
@@ -29,7 +30,14 @@ class Ajax extends CI_Controller {
     endforeach;
 
     $this->db->order_by('fecha_subida', 'desc');
-    $data['imagenes'] = $this->db->get()->result_array();
+
+    $imgsnorate = $this->db->get()->result_array();
+
+    $data['imagenes'] = [];
+
+    foreach ($imgsnorate as $img):
+      $data['imagenes'][] = $this->Imagen->add_rate($img);
+    endforeach;
 
     $this->load->view('galeria', $data);
   }

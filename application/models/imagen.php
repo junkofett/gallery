@@ -54,6 +54,11 @@ class Imagen extends CI_Model{
     return $res;
   }
 
+  public function add_rate($img){
+    $img['rate'] = $this->get_rate($img['id']);
+    return $img;
+  }
+
   public function imgs_by_user($id){
     $this->db->from('usuarios u');
     $this->db->join('imagenes i', 'i.usuarios_id = u.id');

@@ -7,12 +7,16 @@
 <script type="text/javascript">
   $(document).foundation();
   
-  $('.raty').raty({
-    path: "<?= base_url().'js/raty/images'?>",
-    score: function() {
-      return $(this).attr('data-score');
-    }
-  })
+  function ref_raty(){
+    $('.raty').raty({
+      path: "<?= base_url().'js/raty/images'?>",
+      score: function() {
+        return $(this).attr('data-score');
+      }
+    });
+  }
+
+  ref_raty();
 
   $("#cat-menu div").on("click", function (e) {
     var ev = $(this);
@@ -22,6 +26,7 @@
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
         $('.clearing-thumbs').remove();
         $('#contents').append(data);
+        ref_raty();
     });
 
     if ($(this).parent().has("ul")){

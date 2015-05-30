@@ -97,9 +97,16 @@ class Usuarios extends CI_Controller {
   }
 
   public function perfil($nick){
-    $usuario = new Usuario($nick);
-    $imgs['imagenes'] = $this->Imagen->imgs_by_user($usuario->id);
+    $usuario    = new Usuario($nick);
+    $imgsnorate = $this->Imagen->imgs_by_user($usuario->id);
 
+    $imagenes = [];
+
+    foreach ($imgsnorate as $img):
+      $imagenes[] = $this->Imagen->add_rate($img);
+    endforeach;
+
+    $imgs['imagenes'] = $imagenes;
     $head['titulo']          = $usuario->nick;
     $header['menu_opt']      = $this->load->view('forms/login', [], TRUE);
     $data['nick']            = $usuario->nick;
