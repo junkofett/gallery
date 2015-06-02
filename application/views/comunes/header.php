@@ -3,7 +3,8 @@
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1><?= anchor('inicio', 'gallery') ?></h1>
+          <h1 class="show-for-medium-up"><?= anchor('inicio', img(base_url().'images/logo.svg')) ?></h1>
+          <h1 class="show-for-small-only"><?= anchor('inicio', img(base_url().'images/imagotipo.svg')) ?></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. 
          Take out "Menu" to just have icon alone -->

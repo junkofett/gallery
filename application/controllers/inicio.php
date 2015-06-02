@@ -40,7 +40,7 @@ class Inicio extends CI_Controller {
     $lista = '';
 
     foreach ($categorias as $categoria):
-      $lista .= '<li class="menu-cat">
+      $lista .= '<li class="menu-cat button round">
                   <input type="hidden" value="'.$categoria['id'].'"/>
                   <div>'.$categoria['nombre_cat'].'</div>';
 

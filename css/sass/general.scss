@@ -1,15 +1,118 @@
-$morao: #340245;
-$moraoclaro: #694675;
-$asu:   #456774;
-$berde: #9fb10c;
-$rosa:  #ec145a;
+$purple:        #340245;
+$lightpurple:   #694675;
+$lighterpurple: #A18DA9;
+$blue:          #057aa7;
+$green:         #9fb10c;
+$pink:          #ec145a;
 
 .row{min-width: 100%;}
-
-.categoria{cursor: pointer;}
 
 li {
   ul{list-style-type: none;}
 }
 
-.top-bar{background-color: $moraoclaro;}
+nav.top-bar {
+ 
+  -webkit-box-shadow: 0 0 20px 0 rgba(66,66,66,0.5);
+  box-shadow: 0 0 20px 0 rgba(66,66,66,0.5);
+ 
+  &,.top-bar-section ul,.top-bar-section li:not(.has-form) a:not(.button) {
+    background-color: $lightpurple;
+    //color: $nav-buttons-color;
+  }
+ 
+  .top-bar-section li:not(.has-form) a:not(.button):hover {
+    background-color: $lightpurple;
+    //color: $nav-buttons-color;
+  }
+ 
+  .top-bar-section .divider, .top-bar-section [role="separator"] {
+    border-top: 1px solid $purple;
+  }
+ 
+  .title-area {
+    background-color: $lightpurple;
+ 
+    img {
+      max-width: 100%;
+      height: 40px;
+    }
+ 
+  }
+ 
+  .label {
+    background-color: $lightpurple;
+    //color: $color;
+  }
+ 
+}
+
+//.top-bar, .top-bar .title-area .name{background-color: $lightpurple;}
+//.top-bar-section .right .has-dropdown{background-color: $lightpurple;}
+
+//--------------------------------------------------------------------CATEGORIAS
+
+#categorias{background-color: $lighterpurple;
+            box-shadow: 0 0 20px 0 rgba(66,66,66,0.5); 
+            min-height: 100vh;
+            padding: 0px;
+            padding-top: 1em;
+            padding-right: 0.4em;
+            position: fixed;
+
+  li{
+    padding: 0;
+
+    div{
+      padding-left: 0.4em;
+    }
+  }
+
+  .button{text-align: left;
+    box-shadow: -1px -1px 0px $pink;
+  }
+
+  .button:hover{
+   box-shadow: -1px -1px 0px $green;
+  }
+}
+
+#cat-menu li ul {
+  display: none;
+  padding-right: 0.4em;
+  //background: $green;
+}
+
+.menu-cat{
+  cursor: pointer;
+  display: block;
+  //background: none;
+  //padding: 10px 0px;
+  //padding-left: 30px;
+  font-size: 1.1em;
+  //text-decoration: none;
+  font-weight: bold;
+  color: #e3e7f1;
+  text-shadow: 1px 1px 1px #000;
+}
+
+.button{background: $green;}
+
+.button:hover{
+    background: $pink;
+}
+//--------------------------------------------------------------------------SALA
+.clearing-thumbs{
+  padding-top: 1em;
+  min-height: 100vh;
+}
+
+#home{
+  background-color: white;
+}
+
+.clearing-thumbs .prev .imagen{
+  padding: 1em;
+  background-color: $lighterpurple;
+  box-shadow: 2px 2px 1px $purple;
+}

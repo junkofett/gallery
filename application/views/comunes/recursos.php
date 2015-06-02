@@ -10,6 +10,7 @@
   function ref_raty(){
     $('.raty').raty({
       path: "<?= base_url().'js/raty/images'?>",
+      space: false,
       score: function() {
         return $(this).attr('data-score');
       }
@@ -59,7 +60,7 @@
         //$('.clearing-thumbs').remove();
           //ev.removeAttr('data-score');
           //ev.attr('data-score', data);
-          console.log(data);
+          //console.log(data);
 
     });
   });
