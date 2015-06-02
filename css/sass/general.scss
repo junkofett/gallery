@@ -2,8 +2,12 @@ $purple:        #340245;
 $lightpurple:   #694675;
 $lighterpurple: #A18DA9;
 $blue:          #057aa7;
+$darkblue:      #024A65;
 $green:         #9fb10c;
 $pink:          #ec145a;
+
+* {margin: 0px;
+  padding: 0px;}
 
 .row{min-width: 100%;}
 
@@ -13,8 +17,8 @@ li {
 
 nav.top-bar {
  
-  -webkit-box-shadow: 0 0 20px 0 rgba(66,66,66,0.5);
-  box-shadow: 0 0 20px 0 rgba(66,66,66,0.5);
+  //-webkit-box-shadow: 1px 1px 1px 2px $purple;
+  box-shadow: 1px 1px 1px 2px $purple;
  
   &,.top-bar-section ul,.top-bar-section li:not(.has-form) a:not(.button) {
     background-color: $lightpurple;
@@ -52,6 +56,10 @@ nav.top-bar {
 
 //--------------------------------------------------------------------CATEGORIAS
 
+#categorias ul {
+  margin-left: 0.5em;
+}
+
 #categorias{background-color: $lighterpurple;
             box-shadow: 0 0 20px 0 rgba(66,66,66,0.5); 
             min-height: 100vh;
@@ -69,11 +77,17 @@ nav.top-bar {
   }
 
   .button{text-align: left;
-    box-shadow: -1px -1px 0px $pink;
+    background-color: $blue;
+    padding-bottom: 0.2em;
+    box-shadow: 1px 1px 1px $darkblue;
   }
 
   .button:hover{
-   box-shadow: -1px -1px 0px $green;
+    box-shadow: 3px 3px 3px $darkblue;
+  }
+
+  .cat-sel{
+    background-color: $green;
   }
 }
 
@@ -96,10 +110,10 @@ nav.top-bar {
   text-shadow: 1px 1px 1px #000;
 }
 
-.button{background: $green;}
+.button{background: $pink;}
 
 .button:hover{
-    background: $pink;
+    background: $purple;
 }
 //--------------------------------------------------------------------------SALA
 .clearing-thumbs{
@@ -116,3 +130,10 @@ nav.top-bar {
   background-color: $lighterpurple;
   box-shadow: 2px 2px 1px $purple;
 }
+
+.imagen div div{
+  font-size: 1em;
+}
+
+.raty-div{margin: 0px;
+          padding: 0px;}

@@ -17,6 +17,10 @@
     });
   }
 
+  function thumbs_remove(){
+    $('.clearing-thumbs').hide().animate({opacity: .5}, 300);
+  }
+
   ref_raty();
 
   $("#cat-menu div").on("click", function (e) {
@@ -25,6 +29,7 @@
     $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.prev('input').val(),
       {'<?= $this->security->get_csrf_token_name(); ?>' : 
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        thumbs_remove();
         $('.clearing-thumbs').remove();
         $('#contents').append(data);
         ref_raty();
