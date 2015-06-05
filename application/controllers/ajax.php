@@ -51,4 +51,10 @@ class Ajax extends CI_Controller {
 
     $this->load->view('galeria', $data);
   }
+
+  public function get_parents($cat){
+    $cats  = $this->Imagen->cat_parents($cat, ['0']);
+
+    echo json_encode($cats);
+  }
 }

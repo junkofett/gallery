@@ -17,19 +17,31 @@ class Imagen extends CI_Model{
                     ->row_array();    
   }
 
+  public function insertar_comentario($img_id, $texto){
+    //COMPROBAR USUARIO LOGUEADO
+    $user_id = $this->session->userdata('id');
+
+    $this->db->insert('comentarios', ['usuarios_id' => $user_id,
+                                      'imagenes_id' => $img_id,
+                                      'texto'       => $texto]);
+    $id = $this->db->insert_id();
+
+    //return $this->db->get_where('comentarios', ['id' => $id])->row_array();
+    return $this->comentario_por($id);
+  }
+
   public function guardar_puntuacion($img_id, $puntuacion){
     $this->db->insert('puntuaciones', 
-                          ['usuarios_id' => $this->session->userdata('id'),
-                           'imagenes_id' => $img_id,
-                           'valoracion'  => $puntuacion]
-                        );
+                        ['usuarios_id' => $this->session->userdata('id'),
+                         'imagenes_id' => $img_id,
+                         'valoracion'  => $puntuacion]
+                      );
   }
 
   public function get_rate($img_id){
     $puntuaciones = $this->db->get_where('puntuaciones', 
                                           ['imagenes_id' => $img_id])
                              ->result_array();
-
     $valor = 0;
 
     foreach ($puntuaciones as $puntuacion):
@@ -40,6 +52,34 @@ class Imagen extends CI_Model{
       return 0;
     else:
       return $valor / count($puntuaciones);
+    endif;
+  }
+
+  public function comentario_por($com_id){
+    $this->db->from('comentarios c');
+    $this->db->join('usuarios u', 'c.usuarios_id = u.id');
+    $this->db->where('c.id', $com_id);
+
+    $comentarios = $this->db->get();
+
+    if($comentarios->num_rows() > 0):
+      return $comentarios->row_array();
+    else:
+      return FALSE;
+    endif;
+  }
+
+  public function get_comentarios($img_id){
+    $this->db->from('comentarios c');
+    $this->db->join('usuarios u', 'c.usuarios_id = u.id');
+    $this->db->where('imagenes_id', $img_id);
+
+    $comentarios = $this->db->get();
+
+    if($comentarios->num_rows() > 0):
+      return $comentarios->result_array();
+    else:
+      return FALSE;
     endif;
   }
 
@@ -129,6 +169,23 @@ class Imagen extends CI_Model{
 
       $return[] = $array['id'];
     endforeach;
+
+    return $return;
+  }
+
+  public function cat_parents($cat_id, $return){
+    if($cat_id == 0) return [0];
+
+    $return[] = $cat_id;
+
+    $current = $this->db->get_where('categorias', ['id' => $cat_id])
+                        ->row_array();
+    $parent = $this->db->get_where('categorias', ['id' => $current['padre_id']])
+                       ->row_array();
+
+    if(count($parent) > 0):
+      $return = $this->cat_parents($parent['id'], $return);
+    endif;
 
     return $return;
   }

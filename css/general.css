@@ -5,6 +5,9 @@
 .row {
   min-width: 100%; }
 
+.margin-row {
+  min-width: 85% !important; }
+
 li ul {
   list-style-type: none; }
 
@@ -23,6 +26,26 @@ nav.top-bar {
       height: 40px; }
   nav.top-bar .label {
     background-color: #694675; }
+
+#notificaciones i {
+  position: relative;
+  font-size: 1.6em;
+  top: 0.2em; }
+
+.badge {
+  background-color: #9fb10c;
+  position: relative;
+  font-weight: bold;
+  top: -0.4em;
+  right: 0.4em;
+  line-height: 16px;
+  padding: 0 5px;
+  font-family: Arial, sans-serif;
+  color: #ec145a;
+  text-shadow: 1px 1px 1px #340245;
+  border: 2px solid;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px #340245; }
 
 #categorias ul {
   margin-left: 0.5em; }
@@ -67,17 +90,27 @@ nav.top-bar {
 .button:hover {
   background: #340245; }
 
+.cat-active {
+  background-color: #FF8500 !important;
+  box-shadow: -2px -2px 2px #340245 !important; }
+
 .clearing-thumbs {
   padding-top: 1em;
   min-height: 100vh; }
 
+section[role="main"] {
+  padding-top: 1em; }
+
 #home {
   background-color: white; }
 
+#contents {
+  display: none; }
+
 .clearing-thumbs .prev .imagen {
   padding: 1em;
-  background-color: #A18DA9;
-  box-shadow: 2px 2px 1px #340245; }
+  background-color: lightgray;
+  box-shadow: 2px 2px 1px gray; }
 
 .imagen div div {
   font-size: 1em; }
@@ -85,5 +118,10 @@ nav.top-bar {
 .raty-div {
   margin: 0px;
   padding: 0px; }
+
+.comentario {
+  background-color: #A18DA9;
+  margin: 0.8em;
+  padding: 0.4em; }
 
 /*# sourceMappingURL=general.css.map */

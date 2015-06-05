@@ -2,19 +2,28 @@ $purple:        #340245;
 $lightpurple:   #694675;
 $lighterpurple: #A18DA9;
 $blue:          #057aa7;
+$orange:        #FF8500;
 $darkblue:      #024A65;
 $green:         #9fb10c;
 $pink:          #ec145a;
 
+//-----------------------------------------------------------------------GENERAL
 * {margin: 0px;
   padding: 0px;}
 
-.row{min-width: 100%;}
+.row{min-width: 100%;
+    //outline: solid red 1px;
+  }
+
+//.columns{outline: solid green 1px}
+
+.margin-row{min-width: 85% !important}
 
 li {
   ul{list-style-type: none;}
 }
 
+//-----------------------------------------------------------BARRA DE NAVEGACIÓN
 nav.top-bar {
  
   //-webkit-box-shadow: 1px 1px 1px 2px $purple;
@@ -53,6 +62,29 @@ nav.top-bar {
 
 //.top-bar, .top-bar .title-area .name{background-color: $lightpurple;}
 //.top-bar-section .right .has-dropdown{background-color: $lightpurple;}
+
+#notificaciones i{
+  position: relative;
+  font-size: 1.6em;
+  top: 0.2em;
+
+}
+
+.badge {
+  background-color: $green;
+  position: relative;
+  font-weight: bold;
+  top: -0.4em;
+  right: 0.4em;
+  line-height: 16px;
+  padding: 0 5px;
+  font-family: Arial, sans-serif;
+  color: $pink;
+  text-shadow: 1px 1px 1px $purple;
+  border: 2px solid;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px $purple;
+}
 
 //--------------------------------------------------------------------CATEGORIAS
 
@@ -115,20 +147,31 @@ nav.top-bar {
 .button:hover{
     background: $purple;
 }
+
+.cat-active{
+  background-color: $orange !important;
+  box-shadow: -2px -2px 2px $purple !important;
+}
 //--------------------------------------------------------------------------SALA
 .clearing-thumbs{
   padding-top: 1em;
   min-height: 100vh;
 }
 
+section[role="main"]{padding-top: 1em;}
+
 #home{
   background-color: white;
 }
 
+#contents{
+  display:none;
+}
+
 .clearing-thumbs .prev .imagen{
   padding: 1em;
-  background-color: $lighterpurple;
-  box-shadow: 2px 2px 1px $purple;
+  background-color: lightgray;
+  box-shadow: 2px 2px 1px gray;
 }
 
 .imagen div div{
@@ -137,3 +180,7 @@ nav.top-bar {
 
 .raty-div{margin: 0px;
           padding: 0px;}
+
+.comentario{background-color: $lighterpurple;
+            margin: 0.8em;
+            padding: 0.4em;}

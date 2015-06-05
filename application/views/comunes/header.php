@@ -14,26 +14,29 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          
-            <?php if($this->session->userdata('nick') != NULL): ?>
-              <li class="has-dropdown">
-                <a href="#"><?= $this->session->userdata('nick') ?></a>
-                <ul class="dropdown">
-                  <li><a href="#">Editar Perfil</a></li>
-                  <li><?= anchor('imagenes/upload', 'Subir Imagen') ?></li>
-                  <li><?= anchor('usuarios/logout', 'Logout') ?></li>
-                </ul>
-              </li>
-            <?php else: ?>
-              <li class="has-dropdown">
-                <a href="#">Login</a>
-                <ul class="dropdown">
-                  <li>
-                    <?= $menu_opt ?>
-                  </li>
-                </ul>  
-              </li>
-            <?php endif; ?>
+          <?php if($this->session->userdata('nick') != NULL): ?>
+            <li class="has-dropdown">
+              <a href="#" id="notificaciones"> <i class="fa fa-server"></i> 
+                <span class="badge">1</span></a>
+            </li>
+            <li class="has-dropdown">
+              <a href="#"><?= $this->session->userdata('nick') ?></a>
+              <ul class="dropdown">
+                <li><a href="#">Editar Perfil</a></li>
+                <li><?= anchor('imagenes/upload', 'Subir Imagen') ?></li>
+                <li><?= anchor('usuarios/logout', 'Logout') ?></li>
+              </ul>
+            </li>
+          <?php else: ?>
+            <li class="has-dropdown">
+              <a href="#">Login</a>
+              <ul class="dropdown">
+                <li>
+                  <?= $menu_opt ?>
+                </li>
+              </ul>  
+            </li>
+          <?php endif; ?>
         </ul>
       </section>
     </nav>

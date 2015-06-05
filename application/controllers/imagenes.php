@@ -17,11 +17,18 @@ class Imagenes extends CI_Controller {
   }
 
   public function imagen($id){
-    $data['imagen'] = $this->Imagen->img_por_id($id);
-    $data['rate']   = $this->Imagen->get_rate($id);
+    $data['imagen']      = $this->Imagen->img_por_id($id);
+    $data['rate']        = $this->Imagen->get_rate($id);
+    $data['formcom']     = $this->load->view('forms/comentario',
+                                            ['img_id' => $id], TRUE);
+    $com['comentarios']  = $this->Imagen->get_comentarios($id);
 
-    $head['titulo']      = $data['imagen']['titulo'];
-    $header['menu_opt']  = $this->load->view('forms/login', [], TRUE);
+    if($com['comentarios'] !== FALSE):
+      $data['comentarios'] = $this->load->view('comentarios', $com, TRUE);
+    endif;
+
+    $head['titulo']     = $data['imagen']['titulo'];
+    $header['menu_opt'] = $this->load->view('forms/login', [], TRUE);
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $header);
@@ -35,6 +42,14 @@ class Imagenes extends CI_Controller {
     $this->Imagen->guardar_puntuacion($img_id, $puntuacion);
 
     return $this->Imagen->get_rate($img_id);
+  }
+
+  public function comentar($img_id, $texto){
+    if($texto == '') return FALSE;
+    //COMPROBAR USUARIO LOGUEADO
+    $comentario = $this->Imagen->insertar_comentario($img_id, $texto);
+
+    $this->load->view('comentarios', ['comentarios' => [$comentario]]);
   }
 
   public function upload(){
