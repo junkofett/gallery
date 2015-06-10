@@ -1,4 +1,3 @@
-<div class="large-12 columns">
 <?php foreach ($comentarios as $comentario): ?>
   <div class="comentario">
     <?= htmlspecialchars(urldecode($comentario['texto'])) ?>
@@ -12,4 +11,3 @@
     </div>
   </div>
 <?php endforeach; ?>
-</div>

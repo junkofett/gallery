@@ -7,6 +7,27 @@
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
 <script type="text/javascript">
   $(document).foundation();
+
+  function is_logged(){
+    var is_logged = false;
+
+    $.ajax({
+      url: "<?= base_url() . 'index.php/ajax/is_logged' ?>",
+      data: {
+              '<?= $this->security->get_csrf_token_name(); ?>': '<?= $this->security->get_csrf_hash(); ?>'
+            },
+      type: 'POST',
+      async: false,
+      success: function(data) {
+        if(data == 1) {
+          is_logged = true;
+        }
+      }
+
+    });
+
+    return is_logged;
+  }
   
   function ref_raty(){
     $('.raty').raty({
@@ -16,6 +37,22 @@
         return $(this).attr('data-score');
       }
     });
+  }
+
+  function reset_cont(){
+    var cont = $('#cont-noti');
+    
+    $.ajax({
+      url: "<?= base_url() . 'index.php/ajax/get_cont_notif' ?>",
+      data: { '<?= $this->security->get_csrf_token_name(); ?>' :
+                '<?= $this->security->get_csrf_hash(); ?>'
+            },
+      type: 'POST',
+      success: function(data) {
+        cont.html(data);
+      }
+    });
+
   }
 
   ref_raty();
@@ -82,17 +119,21 @@
   $('.raty').on('click', function(e){
     var ev     = $(this);
     var puntos = ev.find('input').val();
-    var id     = $('#img_id').val();
+    var id     = ev.parent().parent().find('.img_id').val();
 
-    $.post("<?= base_url() . 'index.php/imagenes/puntuar/' ?>"+
-                            id+"/"+ev.find('input').val(),
-      {'<?= $this->security->get_csrf_token_name(); ?>' : 
-       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+    $.ajax({
+      url: "<?= base_url() . 'index.php/imagenes/puntuar' ?>",
+      data: { '<?= $this->security->get_csrf_token_name(); ?>' : '<?= $this->security->get_csrf_hash(); ?>',
+              "img_id"      : id,
+              "puntuacion"  : puntos},
+      type: 'POST',
+      async: false,
+      success: function(data) {
         //$('.clearing-thumbs').remove();
           //ev.removeAttr('data-score');
           //ev.attr('data-score', data);
           //console.log(data);
-
+      }
     });
   });
 
@@ -102,14 +143,38 @@
     var img_id = $('#nuevocomentario').prev('input').val();
 
     if(ncom != ''){
-      $.post("<?= base_url() . 'index.php/imagenes/comentar/' ?>"+
-                            img_id+"/"+ncom,
-      {'<?= $this->security->get_csrf_token_name(); ?>' : 
-       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
-        $('#comentarios').prepend(data);
+      $.ajax({
+        url: "<?= base_url() . 'index.php/imagenes/comentar' ?>",
+        data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                        '<?= $this->security->get_csrf_hash(); ?>',
+                "img_id" : img_id ,
+                "texto"  : ncom},
+        type: 'POST',
+        async: false,
+        success: function(data) {
+          $('#comentarios').prepend(data);
+          $('#nuevocomentario').val('');
+        }
       });
     }else{
       alert('Debe rellenar el formulario');
+    }
+
+    reset_cont();
+  });
+
+  $('.seguir').on('click', function(){
+    var ev   = $(this);
+    var nick = ev.find('input').val();
+
+    if(is_logged() == true){
+      $.post("<?= base_url() . 'index.php/ajax/seguir_usuario/' ?>"+nick,
+        {'<?= $this->security->get_csrf_token_name(); ?>' : 
+         '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+          ev.html('Siguiendo');
+      });
+    }else{
+      console.log('wtf');
     }
   });
 

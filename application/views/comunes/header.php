@@ -17,7 +17,17 @@
           <?php if($this->session->userdata('nick') != NULL): ?>
             <li class="has-dropdown">
               <a href="#" id="notificaciones"> <i class="fa fa-server"></i> 
-                <span class="badge">1</span></a>
+                <?php if (isset($cont_noti) ): ?>
+                  <span class="badge" id="cont-noti"><?= $cont_noti ?></span>
+                <?php endif; ?>
+              </a>
+            <?php if(isset($notificaciones)): ?>
+              <ul class="dropdown" id="lista_notif">
+                <?php foreach ($notificaciones as $noti): ?>
+                  <li> <?= anchor($noti['notif_url'], $noti['texto']) ?> </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php endif; ?>
             </li>
             <li class="has-dropdown">
               <a href="#"><?= $this->session->userdata('nick') ?></a>

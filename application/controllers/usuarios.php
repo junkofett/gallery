@@ -107,16 +107,18 @@ class Usuarios extends CI_Controller {
     endforeach;
 
     $imgs['imagenes'] = $imagenes;
-    $head['titulo']          = $usuario->nick;
-    $header['menu_opt']      = $this->load->view('forms/login', [], TRUE);
+    $head['titulo']   = $usuario->nick;
+
+    $data['usuario_seguido'] = $this->Usuario->es_seguidor($nick);
     $data['nick']            = $usuario->nick;
+    $data['user_id']         = $usuario->id;  
     $data['descripcion_usr'] = $usuario->descripcion_usr;
     $data['email']           = $usuario->email;
     $data['fecha_nac']       = $usuario->fecha_nac;
     $data['imagenes']        = $this->load->view('galeria', $imgs, TRUE);
 
     $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header', $header);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
     $this->load->view('usuario/usuario', $data);
     $this->load->view('comunes/recursos');
   }

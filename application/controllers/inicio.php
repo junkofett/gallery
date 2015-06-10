@@ -24,14 +24,8 @@ class Inicio extends CI_Controller {
     $data['categorias']  = $lista_cat;
     $data['contents']    = $this->load->view('galeria', $galeria, TRUE);
 
-    if(!$this->session->userdata('nick')):
-      $header['menu_opt'] = $this->load->view('forms/login', [], TRUE);
-    else:
-      $header['menu_opt'] = FALSE; 
-    endif;
-
     $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header', $header);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
     $this->load->view('comunes/home', $data);
     $this->load->view('comunes/recursos');
   }

@@ -109,7 +109,8 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Usuario', 'Imagen', 'Etiqueta', 'Notificacion');
+$autoload['model'] = array('Usuario', 'Imagen', 'Etiqueta', 'Notificacion',
+                           'Navheader');
 
 
 /* End of file autoload.php */

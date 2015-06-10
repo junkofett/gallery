@@ -6,6 +6,7 @@
         <div class="large-11 columns">
           <?= anchor('imagenes/imagen/'.$imagen['id'], img($imagen['thumb_url'])) ?>
         </div>
+        <input type="hidden" class="img_id" value=<?= $imagen['id'] ?>>
         <div class="large-1 columns raty-div">
           <div class="raty" data-score=<?= $imagen['rate'] ?>></div>
         </div>

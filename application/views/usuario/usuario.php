@@ -1,6 +1,22 @@
 <div class="row">
   <div class="large-5 columns">
-    <h2><?= $nick ?></h2>
+    <div class="row">
+      <div class="large-8 columns">
+        <h2><?= $nick ?></h2>
+      </div>
+      <div class="large-4 columns">
+      <?php if (!$usuario_seguido): ?>
+        <button class="button tiny seguir">
+          <input type="hidden" value="<?= $nick ?>">
+          <i class="fa fa-user-plus"></i> seguir
+        </button>
+      <?php else: ?>
+        <button class="button tiny">
+          siguiendo
+        </button>
+      <?php endif; ?>
+      </div>
+    </div>
     <p class="descripcion-usr"><?= $descripcion_usr ?></p>
   </div>
   <div class="large-7 columns">

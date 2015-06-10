@@ -10,15 +10,17 @@ class Imagen extends CI_Model{
   }
 
   public function editar_imagen($id){
-    //CONTROLAR QUE NO ENTREN USUARIOS NO LOGUEADOS
-    //Y QUE EL USUARIO ES AUTOR DE LA IMAGEN
+    //COMPROBAR QUE LA IMAGEN EXISTE
+    if(!$this->Usuario->is_owner($id)) redirect('inicio');
+
     $img = $this->db->get_where('imagenes',
                               ['id' => $id])
                     ->row_array();    
   }
 
   public function insertar_comentario($img_id, $texto){
-    //COMPROBAR USUARIO LOGUEADO
+    if(!$this->Usuario->is_logged()) redirect('inicio');
+
     $user_id = $this->session->userdata('id');
 
     $this->db->insert('comentarios', ['usuarios_id' => $user_id,
@@ -26,7 +28,6 @@ class Imagen extends CI_Model{
                                       'texto'       => $texto]);
     $id = $this->db->insert_id();
 
-    //return $this->db->get_where('comentarios', ['id' => $id])->row_array();
     return $this->comentario_por($id);
   }
 
@@ -121,6 +122,11 @@ class Imagen extends CI_Model{
     endif;
 
     $this->db->insert('imagenes', $insert);
+
+    $img = $this->db->get_where('imagenes', ['id' => $this->db->insert_id()])
+                    ->row_array();
+
+    $this->Notificacion->notificar_publicacion($img);
 
     if(isset($hashtags)):
       $img_id  = $this->db->insert_id();

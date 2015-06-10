@@ -52,9 +52,24 @@ class Ajax extends CI_Controller {
     $this->load->view('galeria', $data);
   }
 
+  public function get_cont_notif(){
+    if(!$this->input->is_ajax_request()) return;
+
+    echo $this->Usuario->contar_notificaciones();
+  }
+
   public function get_parents($cat){
     $cats  = $this->Imagen->cat_parents($cat, ['0']);
 
     echo json_encode($cats);
+  }
+
+  public function seguir_usuario($nick){
+    $this->Usuario->seguir_usuario($nick);
+    $this->Notificacion->notificar_seguidor($nick);
+  }
+
+  public function is_logged(){
+    echo (string)$this->Usuario->is_logged();
   }
 }

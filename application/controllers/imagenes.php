@@ -28,27 +28,34 @@ class Imagenes extends CI_Controller {
     endif;
 
     $head['titulo']     = $data['imagen']['titulo'];
-    $header['menu_opt'] = $this->load->view('forms/login', [], TRUE);
 
     $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header', $header);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
     $this->load->view('imagen', $data);
     $this->load->view('comunes/recursos');
   }
 
-  public function puntuar($img_id, $puntuacion){
+//  public function puntuar($img_id, $puntuacion){
+  public function puntuar(){
     if(!$this->Usuario->is_logged()) return FALSE;
+
+    $img_id     = $this->input->post('img_id');
+    $puntuacion = $this->input->post('puntuacion');
 
     $this->Imagen->guardar_puntuacion($img_id, $puntuacion);
 
     return $this->Imagen->get_rate($img_id);
   }
 
-  public function comentar($img_id, $texto){
-    if($texto == '') return FALSE;
-    //COMPROBAR USUARIO LOGUEADO
-    $comentario = $this->Imagen->insertar_comentario($img_id, $texto);
+  public function comentar(){
+    if(!$this->Usuario->is_logged()) redirect('inicio');
 
+    $img_id = $this->input->post('img_id');
+    $texto  = $this->input->post('texto');
+
+    $comentario = $this->Imagen->insertar_comentario($img_id, $texto);
+    
+    $this->Notificacion->notificar_comentario($comentario);
     $this->load->view('comentarios', ['comentarios' => [$comentario]]);
   }
 
