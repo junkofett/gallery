@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Nova+Mono);
 * {
   margin: 0px;
   padding: 0px; }
@@ -10,6 +11,31 @@
 
 li ul {
   list-style-type: none; }
+
+.valign-middle {
+  display: table; }
+  .valign-middle > .columns {
+    display: table-cell;
+    vertical-align: middle; }
+  .valign-middle > .columns, .valign-middle > [class*="column"] + [class*="column"]:last-child {
+    float: none; }
+
+#reg-form {
+  min-height: 100%;
+  background: url("../images/gallerylogo.svg"), linear-gradient(#694675 70%, #ec145a);
+  background-position: center;
+  position: relative; }
+  #reg-form form {
+    background-color: rgba(159, 177, 12, 0.7);
+    padding: 2em; }
+  #reg-form label {
+    color: #340245; }
+
+#cont-form {
+  position: absolute; }
+
+#reg-login {
+  background: linear-gradient(#694675 70%, #ec145a); }
 
 nav.top-bar {
   box-shadow: 1px 1px 1px 2px #340245; }
@@ -26,6 +52,21 @@ nav.top-bar {
       height: 40px; }
   nav.top-bar .label {
     background-color: #694675; }
+
+.dropdown li {
+  background-color: #9fb10c;
+  box-shadow: -1px 1px 1px 1px #340245; }
+
+ul[class=dropdown] li {
+  background-color: #9fb10c; }
+
+#login-form {
+  background-color: #9fb10c; }
+  #login-form input {
+    max-width: 90%; }
+  #login-form label {
+    background-color: #9fb10c;
+    color: #340245; }
 
 #notificaciones i {
   position: relative;
@@ -123,5 +164,21 @@ section[role="main"] {
   background-color: #A18DA9;
   margin: 0.8em;
   padding: 0.4em; }
+  .comentario .time {
+    color: #340245;
+    font-size: 0.9em; }
+
+.fav-button[class="disabled"] {
+  background-color: #9fb10c; }
+
+.hashtags span {
+  font-size: 0.8em; }
+
+#hashtitle {
+  font-family: 'Nova Mono';
+  font-size: 4em;
+  padding: 0px;
+  color: #694675;
+  text-shadow: 2px 2px #340245; }
 
 /*# sourceMappingURL=general.css.map */

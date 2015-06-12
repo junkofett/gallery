@@ -16,11 +16,11 @@ create table seguidores(
   usuarios_id     bigint  constraint fk_seguidores_usuarios_id
                             references usuarios(id) on delete no action
                             on update cascade,
-  seguidores_id   bigint  constraint fk_seguidores_seguidores_id
+  seguidos_id   bigint  constraint fk_seguidores_seguidos_id
                             references usuarios(id) on delete no action
                             on update cascade,
 
-  constraint pk_seguidores primary key (usuarios_id, seguidores_id)
+  constraint pk_seguidores primary key (usuarios_id, seguidos_id)
 );
 
 drop table if exists fotos cascade;
@@ -89,7 +89,8 @@ create table comentarios(
   imagenes_id   bigint        constraint fk_imagenes_imagenes_id
                                   references imagenes(id) on delete no action
                                   on update cascade,
-  texto         text          not null
+  texto         text          not null,
+  fecha_com     timestamp     default current_timestamp
 );
 
 drop table if exists notificaciones cascade;
@@ -100,7 +101,9 @@ create table notificaciones(
                                   references usuarios(id) on delete no action
                                   on update cascade,
   texto         varchar(200)  not null,
-  notif_url     varchar(200)  not null
+  notif_url     varchar(200)  not null,
+  vista         boolean       default FALSE,
+  fecha_notif   timestamp     default current_timestamp
 );
 
 drop table if exists puntuaciones cascade;

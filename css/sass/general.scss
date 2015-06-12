@@ -7,6 +7,8 @@ $darkblue:      #024A65;
 $green:         #9fb10c;
 $pink:          #ec145a;
 
+@import url(http://fonts.googleapis.com/css?family=Nova+Mono);
+
 //-----------------------------------------------------------------------GENERAL
 * {margin: 0px;
   padding: 0px;}
@@ -23,6 +25,34 @@ li {
   ul{list-style-type: none;}
 }
 
+.valign-middle {
+    display: table;
+
+    > .columns {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    > .columns, > [class*="column"] + [class*="column"]:last-child {
+        float: none;
+    }
+}
+
+//-----------------------------------------------------------FORMULARIOS + MODAL
+
+#reg-form{min-height: 100%;
+  background: url("../images/gallerylogo.svg"),linear-gradient($lightpurple 70%, $pink);
+  background-position: center;
+  position: relative;
+  
+  form{background-color: rgba(159, 177, 12, 0.7);
+      padding: 2em;}
+  label{color: $purple;}
+}
+
+#cont-form{position: absolute;}
+
+#reg-login{background: linear-gradient($lightpurple 70%, $pink);}
 //-----------------------------------------------------------BARRA DE NAVEGACIÓN
 nav.top-bar {
  
@@ -52,12 +82,30 @@ nav.top-bar {
     }
  
   }
- 
+
   .label {
     background-color: $lightpurple;
-    //color: $color;
   }
- 
+}
+
+.dropdown{
+  li{
+    background-color: $green;
+    box-shadow: -1px 1px 1px 1px $purple;
+  }
+}
+
+ul[class=dropdown]{
+  li{background-color: $green;}
+}
+
+#login-form{
+  background-color: $green;
+  input{max-width: 90%;}
+  label{
+    background-color: $green;
+    color: $purple;
+  }
 }
 
 //.top-bar, .top-bar .title-area .name{background-color: $lightpurple;}
@@ -67,7 +115,6 @@ nav.top-bar {
   position: relative;
   font-size: 1.6em;
   top: 0.2em;
-
 }
 
 .badge {
@@ -183,4 +230,22 @@ section[role="main"]{padding-top: 1em;}
 
 .comentario{background-color: $lighterpurple;
             margin: 0.8em;
-            padding: 0.4em;}
+            padding: 0.4em;
+  .time{
+    color: $purple;
+    font-size: 0.9em;}
+}
+
+.fav-button[class="disabled"]{background-color: $green;}
+
+.hashtags{ 
+  span{
+    font-size: 0.8em;
+  }
+}
+
+#hashtitle{font-family: 'Nova Mono';
+           font-size: 4em;
+           padding: 0px;
+           color: $lightpurple;
+           text-shadow: 2px 2px $purple;}

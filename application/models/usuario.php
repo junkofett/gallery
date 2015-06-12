@@ -85,9 +85,11 @@ class Usuario extends CI_Model{
     endif;
   }
 
-  public function registrar($nick, $pass){
-    $this->db->insert('usuarios', ['nick' => $nick, 
-                                   'pass' => $pass]);
+  public function registrar($nick, $pass, $email, $fecha_nac){
+    $this->db->insert('usuarios', ['nick'      => $nick, 
+                                   'pass'      => $pass,
+                                   'email'     => $email,
+                                   'fecha_nac' => $fecha_nac]);
   }
 
   public function seguir_usuario($nick){
@@ -99,8 +101,8 @@ class Usuario extends CI_Model{
     if($usuario === FALSE):
       return FALSE;
     else:
-      $this->db->insert('seguidores', ['usuarios_id'   => $actual_id,
-                                       'seguidores_id' => $usuario->id]);
+      $this->db->insert('seguidores', ['usuarios_id' => $actual_id,
+                                       'seguidos_id' => $usuario->id]);
     endif;
   }
 
@@ -113,8 +115,8 @@ class Usuario extends CI_Model{
       
       $res = $this->db->get_where(
                           'seguidores', 
-                          ['usuarios_id'   => $this->session->userdata('id'),
-                           'seguidores_id' => $seguido['id']]
+                          ['usuarios_id' => $this->session->userdata('id'),
+                           'seguidos_id' => $seguido['id']]
                         );
 
       if($res->num_rows() > 0):
@@ -128,7 +130,7 @@ class Usuario extends CI_Model{
   }
 
   public function contar_notificaciones(){
-    if(!$this->Usuario->is_logged()) redirect('inicio');
+    if(!$this->Usuario->is_logged()) return FALSE;
 
     $this->db->select('count(*)');
     $this->db->from('notificaciones');
@@ -143,7 +145,7 @@ class Usuario extends CI_Model{
   }
 
   public function get_notificaciones(){
-    if(!$this->Usuario->is_logged()) redirect('inicio');
+    if(!$this->Usuario->is_logged()) return FALSE;
 
     $user_id = $this->session->userdata('id');
     $res = $this->db->get_where('notificaciones', ['usuarios_id' => $user_id]);

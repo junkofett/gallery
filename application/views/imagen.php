@@ -13,6 +13,21 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="large-9 columns hashtags">
+          <?php foreach ($hashtags as $hashtag): ?>
+            <span><?= anchor('imagenes/hashtag/'.$hashtag['nombre_et'],
+                                            '#'.$hashtag['nombre_et']) ?></span>
+          <?php endforeach; ?>
+        </div>
+        <div class="large-3 columns">
+        <?php if(!$fav): ?>
+          <button class="button tiny right fav-button"><i class="fa fa-heart"></i></button>
+        <?php else: ?>
+          <button class="button tiny fav-button disabled"><i class="fa fa-heart-o"></i></button>
+        <?php endif; ?>
+        </div>
+      </div>
     </div>
     <div class="large-4 columns">
       <div class="row">

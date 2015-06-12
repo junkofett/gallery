@@ -5,6 +5,11 @@
 <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
+<div id="reg-login" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <h3 id="modalTitle">Debes estar logueado para realizar esta acción</h3>
+  <?= anchor('/usuarios/registro', '<button class="button">Registrate!</button>') ?>
+  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
 <script type="text/javascript">
   $(document).foundation();
 
@@ -55,7 +60,20 @@
 
   }
 
+  function centrarForm() {
+    $("#cont-form").css({
+      "top": (($('#reg-form').height() / 2) - ($('#cont-form').height() / 2)) + "px",
+      "left": (($('#reg-form').width() / 2) - ($('#cont-form').width() / 2)) + "px"
+    });
+
+  }
+
+  centrarForm();
   ref_raty();
+
+  $(window).resize(function() {
+    centrarForm();
+  });
 
   $('#contents').slideDown(300);
 
@@ -117,68 +135,93 @@
   });
 
   $('.raty').on('click', function(e){
-    var ev     = $(this);
-    var puntos = ev.find('input').val();
-    var id     = ev.parent().parent().find('.img_id').val();
+    if(!is_logged()){
+      $('#reg-login').foundation('reveal', 'open');
+    }else{
+      var ev     = $(this);
+      var puntos = ev.find('input').val();
+      var id     = ev.parent().parent().find('.img_id').val();
 
-    $.ajax({
-      url: "<?= base_url() . 'index.php/imagenes/puntuar' ?>",
-      data: { '<?= $this->security->get_csrf_token_name(); ?>' : '<?= $this->security->get_csrf_hash(); ?>',
-              "img_id"      : id,
-              "puntuacion"  : puntos},
-      type: 'POST',
-      async: false,
-      success: function(data) {
-        //$('.clearing-thumbs').remove();
-          //ev.removeAttr('data-score');
-          //ev.attr('data-score', data);
-          //console.log(data);
-      }
-    });
-  });
-
-  $('#insertarcomentario').on('click', function(){
-    var ev     = $(this);
-    var ncom   = $('#nuevocomentario').val();
-    var img_id = $('#nuevocomentario').prev('input').val();
-
-    if(ncom != ''){
       $.ajax({
-        url: "<?= base_url() . 'index.php/imagenes/comentar' ?>",
-        data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
-                        '<?= $this->security->get_csrf_hash(); ?>',
-                "img_id" : img_id ,
-                "texto"  : ncom},
+        url: "<?= base_url() . 'index.php/imagenes/puntuar' ?>",
+        data: { '<?= $this->security->get_csrf_token_name(); ?>' : '<?= $this->security->get_csrf_hash(); ?>',
+                "img_id"      : id,
+                "puntuacion"  : puntos},
         type: 'POST',
         async: false,
         success: function(data) {
-          $('#comentarios').prepend(data);
-          $('#nuevocomentario').val('');
+          //$('.clearing-thumbs').remove();
+            //ev.removeAttr('data-score');
+            //ev.attr('data-score', data);
+            //console.log(data);
         }
       });
-    }else{
-      alert('Debe rellenar el formulario');
     }
+  });
 
-    reset_cont();
+  $('#insertarcomentario').on('click', function(){
+    if(!is_logged()){
+      $('#reg-login').foundation('reveal', 'open');
+    }else{
+      var ev     = $(this);
+      var ncom   = $('#nuevocomentario').val();
+      var img_id = $('#nuevocomentario').prev('input').val();
+
+      if(ncom != ''){
+        $.ajax({
+          url: "<?= base_url() . 'index.php/imagenes/comentar' ?>",
+          data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                          '<?= $this->security->get_csrf_hash(); ?>',
+                  "img_id" : img_id ,
+                  "texto"  : ncom},
+          type: 'POST',
+          async: false,
+          success: function(data) {
+            $('#comentarios').prepend(data);
+            $('#nuevocomentario').val('');
+          }
+        });
+      }else{
+        alert('Debe rellenar el formulario');
+      }
+
+      reset_cont();
+    }
   });
 
   $('.seguir').on('click', function(){
-    var ev   = $(this);
-    var nick = ev.find('input').val();
+    if(!is_logged()){
+      $('#reg-login').foundation('reveal', 'open');
+    }else{
+      var ev   = $(this);
+      var nick = ev.find('input').val();
 
-    if(is_logged() == true){
       $.post("<?= base_url() . 'index.php/ajax/seguir_usuario/' ?>"+nick,
         {'<?= $this->security->get_csrf_token_name(); ?>' : 
          '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
           ev.html('Siguiendo');
       });
-    }else{
-      console.log('wtf');
     }
   });
 
-  /*$('#sngl-img').css('height', function(){
-    return $(window).height();
-  });*/
+  $('.fav-button').on('click', function(){
+    if(!is_logged()){
+      $('#reg-login').foundation('reveal', 'open');
+    }else{
+      var ev = $(this);
+      var img_id = ev.parent().parent().parent().find('.img_id').val();
+
+      $.ajax({
+          url: "<?= base_url() . 'index.php/ajax/add_fav' ?>",
+          data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                          '<?= $this->security->get_csrf_hash(); ?>',
+                  "img_id" : img_id},
+          type: 'POST',
+          async: false,
+          success: function(data) {
+
+          }
+      });
+    }
+  });
 </script>

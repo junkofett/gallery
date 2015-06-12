@@ -17,6 +17,8 @@ class Imagenes extends CI_Controller {
   }
 
   public function imagen($id){
+    //comprobar imagen existe
+
     $data['imagen']      = $this->Imagen->img_por_id($id);
     $data['rate']        = $this->Imagen->get_rate($id);
     $data['formcom']     = $this->load->view('forms/comentario',
@@ -27,6 +29,9 @@ class Imagenes extends CI_Controller {
       $data['comentarios'] = $this->load->view('comentarios', $com, TRUE);
     endif;
 
+    $data['fav']      = $this->Imagen->comprobar_fav($id);
+    $data['hashtags'] = $this->Imagen->add_hashtags($data['imagen'])['hashtags']; 
+
     $head['titulo']     = $data['imagen']['titulo'];
 
     $this->load->view('comunes/head', $head);
@@ -35,7 +40,23 @@ class Imagenes extends CI_Controller {
     $this->load->view('comunes/recursos');
   }
 
-//  public function puntuar($img_id, $puntuacion){
+  public function hashtag($nombre_et){
+    if(($et = $this->Etiqueta->get_etiqueta_nombre($nombre_et)) === FALSE):
+      redirect('inicio') ;
+    endif;
+
+    $imgs['imagenes'] = $this->Imagen->get_galeria(NULL, NULL, $et);
+
+    $data['contents']    = $this->load->view('galeria', $imgs, TRUE);
+    $data['hashtag_nom'] = '#'.$et['nombre_et'];
+    $head['titulo']      = '#'.$et['nombre_et'].' - gallery';
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('comunes/home', $data);
+    $this->load->view('comunes/recursos');
+  }
+
   public function puntuar(){
     if(!$this->Usuario->is_logged()) return FALSE;
 
@@ -55,7 +76,7 @@ class Imagenes extends CI_Controller {
 
     $comentario = $this->Imagen->insertar_comentario($img_id, $texto);
     
-    $this->Notificacion->notificar_comentario($comentario);
+    //$this->Notificacion->notificar_comentario($comentario);
     $this->load->view('comentarios', ['comentarios' => [$comentario]]);
   }
 

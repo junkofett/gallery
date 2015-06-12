@@ -54,7 +54,9 @@ class Usuarios extends CI_Controller {
   }
 
   public function registro(){
+    $this->load->view('comunes/head', ['titulo' => 'Registro']);
     $this->load->view('forms/registro');
+    $this->load->view('comunes/recursos');
   }
 
   public function registrar(){
@@ -74,16 +76,33 @@ class Usuarios extends CI_Controller {
                     'field' => 'passconf',
                     'label' => 'Confirma Pass',
                     'rules' => 'trim|required'
+                  ),
+                  array(
+                    'field' => 'email',
+                    'label' => 'e.mail',
+                    'rules' => 'trim|required|is_unique[usuarios.email]|matches[confemail]'
+                  ),
+                  array(
+                    'field' => 'confemail',
+                    'label' => 'Confirma e.mail',
+                    'rules' => 'trim|required'
+                  ),
+                  array(
+                    'field' => 'fecha_nac',
+                    'label' => 'Fecha de Nacimiento',
+                    'rules' => 'trim|required'
                   )
                 );
 
-      $nick = $this->input->post('nick');
-      $pass = $this->input->post('pass');
+      $nick      = $this->input->post('nick');
+      $pass      = $this->input->post('pass');
+      $email     = $this->input->post('email');
+      $fecha_nac = $this->input->post('fecha_nac');
 
       $this->form_validation->set_rules($reglas);
 
       if($this->form_validation->run()):
-        $this->Usuario->registrar($nick, md5($pass));
+        $this->Usuario->registrar($nick, md5($pass), $email, $fecha_nac);
         
         $usuario = new Usuario($nick);
 
@@ -97,21 +116,15 @@ class Usuarios extends CI_Controller {
   }
 
   public function perfil($nick){
-    $usuario    = new Usuario($nick);
-    $imgsnorate = $this->Imagen->imgs_by_user($usuario->id);
-
-    $imagenes = [];
-
-    foreach ($imgsnorate as $img):
-      $imagenes[] = $this->Imagen->add_rate($img);
-    endforeach;
+    $usuario  = new Usuario($nick);
+    $imagenes = $this->Imagen->get_galeria($usuario->id);
 
     $imgs['imagenes'] = $imagenes;
     $head['titulo']   = $usuario->nick;
 
     $data['usuario_seguido'] = $this->Usuario->es_seguidor($nick);
     $data['nick']            = $usuario->nick;
-    $data['user_id']         = $usuario->id;  
+    $data['user_id']         = $usuario->id;
     $data['descripcion_usr'] = $usuario->descripcion_usr;
     $data['email']           = $usuario->email;
     $data['fecha_nac']       = $usuario->fecha_nac;

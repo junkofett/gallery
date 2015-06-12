@@ -11,9 +11,25 @@
           <div class="raty" data-score=<?= $imagen['rate'] ?>></div>
         </div>
       </div>
+      <hr>
       <div class="row">
-        <div class="large-9 columns">por <?= anchor('usuarios/perfil/'
+        <div class="large-6 columns">por <?= anchor('usuarios/perfil/'
                                             .$imagen['nick'], $imagen['nick']) ?>
+        </div>
+        <div class="large-6 columns">
+        <?php if(!$imagen['fav']): ?>
+          <button class="button tiny right fav-button"><i class="fa fa-heart"></i></button>
+        <?php else: ?>
+          <button class="button tiny fav-button disabled"><i class="fa fa-heart-o"></i></button>
+        <?php endif; ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-center hashtags">
+          <?php foreach ($imagen['hashtags'] as $hashtag): ?>
+            <span><?= anchor('imagenes/hashtag/'.$hashtag['nombre_et'],
+                                            '#'.$hashtag['nombre_et']) ?></span>
+          <?php endforeach; ?>
         </div>
       </div>
     </div>

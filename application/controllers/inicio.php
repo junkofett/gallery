@@ -3,24 +3,11 @@
 class Inicio extends CI_Controller {
 
   public function index(){
-    $this->db->from('usuarios u');
-    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
-    $this->db->where('nsfw', 'f', 20, 0);
-    $this->db->order_by('fecha_subida', 'desc');
-    $res = $this->db->get();
-    
-    $imgsnorate = $res->result_array();
-    $imagenes   = [];
-
-    foreach ($imgsnorate as $img):
-      $imagenes[] = $this->Imagen->add_rate($img);
-    endforeach;
-
     $categorias = $this->Imagen->arbol(NULL);
     $lista_cat  = $this->listar_categorias($categorias);
 
     $head['titulo']      = 'gallery';
-    $galeria['imagenes'] = $imagenes;
+    $galeria['imagenes'] = $this->Imagen->get_galeria();
     $data['categorias']  = $lista_cat;
     $data['contents']    = $this->load->view('galeria', $galeria, TRUE);
 
@@ -34,7 +21,7 @@ class Inicio extends CI_Controller {
     $lista = '';
 
     foreach ($categorias as $categoria):
-      $lista .= '<li class="menu-cat button radius">
+      $lista .= '<li class="menu-cat button">
                   <input type="hidden" value="'.$categoria['id'].'"/>
                   <div>'.$categoria['nombre_cat'].'</div>';
 

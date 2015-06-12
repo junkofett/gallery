@@ -27,4 +27,14 @@ class Etiqueta extends CI_Model{
     //devuelve id del ultimo inserto en la db
     return $this->db->insert_id();
   }
+
+  public function get_etiqueta_nombre($nombre){
+    $et = $this->db->get_where('etiquetas', ['nombre_et' => $nombre]);
+
+    if($et->num_rows() > 0):
+      return $et->row_array();
+    else:
+      return FALSE;
+    endif;
+  }
 }

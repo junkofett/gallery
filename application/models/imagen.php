@@ -4,9 +4,59 @@ class Imagen extends CI_Model{
 
   public function __construct(){
     parent::__construct();
-    $this->categorias = $this->db
-                            ->get('categorias')
-                            ->result_array();
+    $this->categorias = $this->db->get('categorias')->result_array();
+  }
+
+  public function get_galeria($user_id = NULL, $unnested = NULL, $etiqueta = NULL){
+    //resolver nsfw
+    //resolver paginacion
+
+    $boolhashview = FALSE;
+
+    if($user_id !== NULL):
+      if($this->Usuario->existe($user_id)):
+        $this->db->from('usuarios u');
+        $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+        $this->db->where('i.usuarios_id', $user_id);
+      endif;
+    else:
+      $this->db->from('usuarios u');
+      $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+    endif;
+
+    if($etiqueta !== NULL):
+      $this->db->join('imgs_etiquetas ie', 'i.id = ie.imagenes_id');
+      $this->db->join('etiquetas e', 'ie.etiquetas_id = e.id');
+      $this->db->where('e.id', $etiqueta['id']);
+
+      $boolhashview = TRUE;
+    endif;
+
+    if($unnested !== NULL):
+      foreach ($unnested as $key => $value):
+        if($key > 0):
+          $this->db->or_where('categorias_id =', $value);
+        else:
+          $this->db->where('categorias_id =', $value);
+        endif;
+      endforeach;
+    endif;
+
+    $this->db->where('nsfw', 'f', 20, 0);
+    $this->db->order_by('fecha_subida', 'desc');
+    $res = $this->db->get();
+
+    $imgsnorate = $res->result_array();
+    $imagenes   = [];
+
+    //var_dump($imgsnorate[0]);
+    foreach ($imgsnorate as $img):
+      $img        = $this->add_rate($img);
+      $img['fav'] = $this->comprobar_fav($img['id']);
+      $imagenes[] = $this->add_hashtags($img, $boolhashview); 
+    endforeach;
+    //var_dump($imagenes[0]); die();
+    return $imagenes;
   }
 
   public function editar_imagen($id){
@@ -74,6 +124,7 @@ class Imagen extends CI_Model{
     $this->db->from('comentarios c');
     $this->db->join('usuarios u', 'c.usuarios_id = u.id');
     $this->db->where('imagenes_id', $img_id);
+    $this->db->order_by('fecha_com', 'desc');
 
     $comentarios = $this->db->get();
 
@@ -89,7 +140,6 @@ class Imagen extends CI_Model{
     $this->db->join('imagenes i', 'i.usuarios_id = u.id');
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->where('i.id', $id);
-    $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get()
                     ->row_array();
     return $res;
@@ -98,6 +148,25 @@ class Imagen extends CI_Model{
   public function add_rate($img){
     $img['rate'] = $this->get_rate($img['id']);
     return $img;
+  }
+
+  public function add_hashtags($img, $hashtagview = FALSE){
+    if($hashtagview):
+      $key = 'imagenes_id';
+    else:
+      $key = 'id';
+    endif;
+
+    $img['hashtags'] = $this->get_hashtags($img[$key]);
+    return $img;
+  }
+
+  public function get_hashtags($img_id){
+    $this->db->from('imgs_etiquetas i');
+    $this->db->join('etiquetas e', 'i.etiquetas_id = e.id');
+    $this->db->where('i.imagenes_id', $img_id);
+    $hashtags = $this->db->get();
+    return $hashtags->result_array();
   }
 
   public function imgs_by_user($id){
@@ -126,7 +195,7 @@ class Imagen extends CI_Model{
     $img = $this->db->get_where('imagenes', ['id' => $this->db->insert_id()])
                     ->row_array();
 
-    $this->Notificacion->notificar_publicacion($img);
+    //$this->Notificacion->notificar_publicacion($img);
 
     if(isset($hashtags)):
       $img_id  = $this->db->insert_id();
@@ -144,6 +213,29 @@ class Imagen extends CI_Model{
   public function relacionar_hash($hash_id, $img_id){
     $this->db->insert('imgs_etiquetas', ['imagenes_id'  => $img_id,
                                          'etiquetas_id' => $hash_id]);
+  }
+
+  public function add_fav($img_id){
+    if(!$this->Usuario->is_logged()) return FALSE;
+    //comprobar que la imagen existe
+
+    $usr = $this->session->userdata('id');
+    $this->db->insert('favoritos', ['usuarios_id' => $usr,
+                                    'imagenes_id' => $img_id]);
+  }
+
+  public function comprobar_fav($img_id){
+    if(!$this->Usuario->is_logged()) return FALSE;
+
+    $usr = $this->session->userdata('id');
+    $res = $this->db->get_where('favoritos', ['usuarios_id' => $usr,
+                                              'imagenes_id' => $img_id]);
+
+    if($res->num_rows() > 0):
+      return TRUE;
+    else:
+      return FALSE;
+    endif;
   }
 
   public function arbol($padre_id){

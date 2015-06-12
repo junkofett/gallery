@@ -17,27 +17,7 @@ class Ajax extends CI_Controller {
 
     $unnested = $this->Imagen->unnest($arbol, []);
 
-    $this->db->from('usuarios u');
-    $this->db->join('imagenes i', 'i.usuarios_id = u.id');
-    $this->db->where('nsfw', 'f', 20, 0);
-
-    foreach ($unnested as $key => $value):
-      if($key > 0):
-        $this->db->or_where('categorias_id =', $value);
-      else:
-        $this->db->where('categorias_id =', $value);
-      endif;
-    endforeach;
-
-    $this->db->order_by('fecha_subida', 'desc');
-
-    $imgsnorate = $this->db->get()->result_array();
-
-    $data['imagenes'] = [];
-
-    foreach ($imgsnorate as $img):
-      $data['imagenes'][] = $this->Imagen->add_rate($img);
-    endforeach;
+    $data['imagenes'] = $this->Imagen->get_galeria(NULL, $unnested);
 
     $this->load->view('galeria', $data);
   }
@@ -71,5 +51,15 @@ class Ajax extends CI_Controller {
 
   public function is_logged(){
     echo (string)$this->Usuario->is_logged();
+  }
+
+  public function add_fav(){
+    $img_id = $this->input->post('img_id');
+
+    if($this->Imagen->comprobar_fav($img_id)):
+      return FALSE;
+    else:
+      $this->Imagen->add_fav($img_id);
+    endif;
   }
 }

@@ -13,8 +13,12 @@ class Notificacion extends CI_Model{
   public function get_notificaciones($usuario_id){
     if(!$this->Usuario->existe($usuario_id)) redirect('inicio');
 
-    $notificaciones = $this->db->get_where('notificaciones', 
-                                          ['usuarios_id' => $usuario_id]);
+    $this->db->from('notificaciones');
+    $this->db->where('usuarios_id', $usuario_id);
+    $this->db->where('vista', 'f');
+    $this->db->order_by('fecha_notif', 'desc');
+
+    $notificaciones = $this->db->get();
 
     if($notificacions->num_rows() > 0):
       return $notificaciones->result_array();
@@ -58,7 +62,7 @@ class Notificacion extends CI_Model{
     if(!$this->Usuario->is_logged()) return FALSE;
 
     $usr = $this->session->userdata('id');
-    $res = $this->db->get_where('seguidores', ['seguidores_id' => $usr])
+    $res = $this->db->get_where('seguidores', ['seguidos_id' => $usr])
                     ->result_array();
 
     if(count($res) == 0):
@@ -74,6 +78,21 @@ class Notificacion extends CI_Model{
   }
 
   public function get_ultima_notif(){
+    if(!$this->Usuario->is_logged()) return FALSE;
 
+    $usr = $this->session->userdata('id');
+
+    $this->db->from('notificaciones');
+    $this->db->where('usuarios_id', $usr);
+    $this->db->where('vista', 'f', 1, 0);
+    $this->db->order_by('fecha_notif', 'desc');
+
+    $notif = $this->db->get();
+
+    if($notif->num_rows() > 0):
+      return $notif->row_array();
+    else:
+      return FALSE;
+    endif;
   }
 }

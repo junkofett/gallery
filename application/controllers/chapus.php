@@ -58,4 +58,17 @@ class Chapus extends CI_Controller {
                         where id = ?',[$url, $id]);
     }
   }
+
+  public function rand_time(){
+    $imagenes = $this->db->get('imagenes')->result_array();
+
+    foreach ($imagenes as $imagen):
+      $timestamp = rand(strtotime('-2 weeks'), time());
+
+      //anchor(base_url().'index.php/chapus/rand_time', '<button>tiempo random</button>')
+
+      $this->db->where('id', $imagen['id']);
+      $this->db->update('imagenes', ['fecha_subida' => date('Y-m-d H:i:s.u', $timestamp)]);
+    endforeach;
+  }
 }
