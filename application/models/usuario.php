@@ -129,6 +129,23 @@ class Usuario extends CI_Model{
     endif;
   }
 
+  public function get_seguidores($user_id){
+    if(!$this->Usuario->existe($user_id)) redirect('inicio');
+
+    $seguidos = $this->db->get_where('seguidores', ['usuarios_id' => $user_id])
+                         ->result_array();
+
+    $usuarios = [];
+
+    foreach ($seguidos as $seguido):
+      $usuarios[] = $this->db
+                      ->get_where('usuarios', ['id' => $seguido['seguidos_id']])
+                      ->row_array();
+    endforeach;
+    
+    return $usuarios;
+  }
+
   public function contar_notificaciones(){
     if(!$this->Usuario->is_logged()) return FALSE;
 

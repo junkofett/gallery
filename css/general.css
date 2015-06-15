@@ -9,8 +9,17 @@
 .margin-row {
   min-width: 85% !important; }
 
+#radio-cats {
+  margin: 0px; }
+
+ul {
+  list-style-type: none; }
+
 li ul {
   list-style-type: none; }
+
+a:link {
+  color: #340245; }
 
 .valign-middle {
   display: table; }
@@ -130,6 +139,8 @@ ul[class=dropdown] li {
 
 .button:hover {
   background: #340245; }
+  .button:hover a:link {
+    color: #ec145a; }
 
 .cat-active {
   background-color: #FF8500 !important;
@@ -138,6 +149,13 @@ ul[class=dropdown] li {
 .clearing-thumbs {
   padding-top: 1em;
   min-height: 100vh; }
+
+.by-user p {
+  font-size: 0.9em; }
+  .by-user p a {
+    color: #A18DA9; }
+  .by-user p a:hover {
+    color: #340245; }
 
 section[role="main"] {
   padding-top: 1em; }
@@ -171,14 +189,23 @@ section[role="main"] {
 .fav-button[class="disabled"] {
   background-color: #9fb10c; }
 
-.hashtags span {
-  font-size: 0.8em; }
+.hashtags {
+  padding: 0.4em; }
+  .hashtags span {
+    font-size: 0.8em; }
+    .hashtags span a {
+      color: #340245; }
+    .hashtags span a:hover {
+      color: #ec145a; }
 
-#hashtitle {
+#hashtitle, #favstitle {
   font-family: 'Nova Mono';
   font-size: 4em;
   padding: 0px;
   color: #694675;
   text-shadow: 2px 2px #340245; }
+
+.seguido {
+  padding: 1em; }
 
 /*# sourceMappingURL=general.css.map */

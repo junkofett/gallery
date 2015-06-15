@@ -7,7 +7,7 @@ class Imagen extends CI_Model{
     $this->categorias = $this->db->get('categorias')->result_array();
   }
 
-  public function get_galeria($user_id = NULL, $unnested = NULL, $etiqueta = NULL){
+  public function get_galeria($user_id = NULL, $unnested = NULL, $etiqueta = NULL, $fav = NULL){
     //resolver nsfw
     //resolver paginacion
 
@@ -42,6 +42,14 @@ class Imagen extends CI_Model{
       endforeach;
     endif;
 
+    if($fav !== NULL):
+      if(!$this->Usuario->is_logged()) redirect('inicio');
+
+      $user_id = $fav;
+      $this->db->join('favoritos f', 'f.imagenes_id = i.id');
+      $this->db->where('f.usuarios_id', $user_id);
+    endif;
+
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
@@ -49,13 +57,12 @@ class Imagen extends CI_Model{
     $imgsnorate = $res->result_array();
     $imagenes   = [];
 
-    //var_dump($imgsnorate[0]);
     foreach ($imgsnorate as $img):
       $img        = $this->add_rate($img);
       $img['fav'] = $this->comprobar_fav($img['id']);
       $imagenes[] = $this->add_hashtags($img, $boolhashview); 
     endforeach;
-    //var_dump($imagenes[0]); die();
+
     return $imagenes;
   }
 
@@ -140,9 +147,8 @@ class Imagen extends CI_Model{
     $this->db->join('imagenes i', 'i.usuarios_id = u.id');
     $this->db->where('nsfw', 'f', 20, 0);
     $this->db->where('i.id', $id);
-    $res = $this->db->get()
-                    ->row_array();
-    return $res;
+
+    return $this->db->get()->row_array();;
   }
 
   public function add_rate($img){
@@ -306,5 +312,51 @@ class Imagen extends CI_Model{
     endforeach;
 
     return $radios;
+  }
+
+  public function listar_categorias($categorias){
+    $lista = '';
+
+    foreach ($categorias as $categoria):
+      $lista .= '<li class="menu-cat button">
+                  <input type="hidden" value="'.$categoria['id'].'"/>
+                  <div>'.$categoria['nombre_cat'].'</div>';
+
+      if (isset($categoria['subcats'])):
+        $lista .= '<ul class="cataccordion">';
+        $lista .= $this->listar_categorias($categoria['subcats']);
+        $lista .= '</ul>';
+      endif;
+
+      $lista .= '</li>';
+    endforeach;
+
+    return $lista;
+  }
+
+  public function offcanvas_categorias($categorias){
+    $canvas = '';
+
+    foreach ($categorias as $cat):
+      if(isset($cat['subcats'])):
+        $canvas .= '<li class="has-submenu">';
+      else:
+        $canvas .= '<li>';
+      endif;
+      
+      $canvas .= '<input type="hidden" value="'.$cat['id'].'"/>
+                    <a href="#">'.$cat['nombre_cat'].'</a>';
+
+      if(isset($cat['subcats'])):
+        $canvas .= '<ul class="left-submenu">
+                      <li class="back"><a href="#">atras</a></li>';
+        $canvas .= $this->offcanvas_categorias($cat['subcats']);
+        $canvas .= '</ul>';
+      endif;
+
+      $canvas .= '</li>';
+    endforeach;
+
+    return $canvas;    
   }
 }

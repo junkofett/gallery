@@ -21,9 +21,18 @@ $pink:          #ec145a;
 
 .margin-row{min-width: 85% !important}
 
+#radio-cats{
+  //padding-left: 2em;
+  margin: 0px;
+}
+
+ul{list-style-type: none;}
+
 li {
   ul{list-style-type: none;}
 }
+
+a:link{color: $purple;}
 
 .valign-middle {
     display: table;
@@ -193,6 +202,8 @@ ul[class=dropdown]{
 
 .button:hover{
     background: $purple;
+
+    a:link{color: $pink;}
 }
 
 .cat-active{
@@ -203,6 +214,16 @@ ul[class=dropdown]{
 .clearing-thumbs{
   padding-top: 1em;
   min-height: 100vh;
+}
+
+.by-user{
+
+  p{
+    font-size: 0.9em;
+  
+    a{color: $lighterpurple;}
+    a:hover{color: $purple;}
+  }
 }
 
 section[role="main"]{padding-top: 1em;}
@@ -238,14 +259,23 @@ section[role="main"]{padding-top: 1em;}
 
 .fav-button[class="disabled"]{background-color: $green;}
 
-.hashtags{ 
+.hashtags{
+  padding: 0.4em;
+
   span{
     font-size: 0.8em;
+
+    a{color: $purple;}
+    a:hover{color: $pink;}
   }
 }
 
-#hashtitle{font-family: 'Nova Mono';
+//.tabs-content{background-color: $lighterpurple;}
+
+#hashtitle, #favstitle{font-family: 'Nova Mono';
            font-size: 4em;
            padding: 0px;
            color: $lightpurple;
            text-shadow: 2px 2px $purple;}
+
+.seguido{padding: 1em;}

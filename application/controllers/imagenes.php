@@ -40,6 +40,33 @@ class Imagenes extends CI_Controller {
     $this->load->view('comunes/recursos');
   }
 
+  public function favoritos($user_id = NULL){
+    if($user_id === NULL):
+      if(!$this->Usuario->is_logged()) redirect('inicio');
+
+      $user_id   = $this->session->userdata('id');
+      $user_nick = $this->session->userdata('nick');
+    else:
+      if(!$this->Usuario->existe($user_id)) redirect('inicio');
+
+      $user = $this->Usuario->user_by_id($user_id);
+      $user_id   = $user['id'];
+      $user_nick = $user['nick'];
+    endif;
+
+    $galeria['imagenes'] = $this->Imagen->get_galeria(NULL, NULL, NULL, $user_id);
+
+    $head['titulo']   = 'favoritos - '.$user_nick;
+    $data['favs']     = TRUE;
+    $data['favsnick'] = $user_nick;
+    $data['contents'] = $this->load->view('galeria', $galeria, TRUE);
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('comunes/home', $data);
+    $this->load->view('comunes/recursos');
+  }
+
   public function hashtag($nombre_et){
     if(($et = $this->Etiqueta->get_etiqueta_nombre($nombre_et)) === FALSE):
       redirect('inicio') ;
@@ -84,7 +111,7 @@ class Imagenes extends CI_Controller {
     if(!$this->Usuario->is_logged()) redirect('inicio');
 
     $categorias = $this->Imagen->arbol(NULL);
-    $data['categorias'] = '<ul>'.
+    $data['categorias'] = '<ul id="radio-cats">'.
                             $this->Imagen->radio_categorias($categorias) . 
                           '</ul>';
     $data['error']  = ' ';

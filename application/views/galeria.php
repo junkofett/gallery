@@ -13,14 +13,14 @@
       </div>
       <hr>
       <div class="row">
-        <div class="large-6 columns">por <?= anchor('usuarios/perfil/'
-                                            .$imagen['nick'], $imagen['nick']) ?>
+        <div class="large-6 columns by-user"><p>por <?= anchor('usuarios/perfil/'
+                                            .$imagen['nick'], $imagen['nick']) ?></p>
         </div>
         <div class="large-6 columns">
         <?php if(!$imagen['fav']): ?>
           <button class="button tiny right fav-button"><i class="fa fa-heart"></i></button>
         <?php else: ?>
-          <button class="button tiny fav-button disabled"><i class="fa fa-heart-o"></i></button>
+          <button class="button tiny right fav-button disabled"><i class="fa fa-heart-o"></i></button>
         <?php endif; ?>
         </div>
       </div>

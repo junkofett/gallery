@@ -46,10 +46,10 @@ class Notificacion extends CI_Model{
   public function notificar_seguidor($nick){
     if(!$this->Usuario->is_logged()) return FALSE;
 
-    $usuario_seguidor = $this->Usuario->user_by_nick($nick);
+    $usuario_seguido = $this->Usuario->user_by_nick($nick);
     
-    $usr_disp = $this->Usuario->user_by_id($usuario_seguidor['id']);
-    $usr_noti = $this->Usuario->user_by_id($this->session->userdata('id'));
+    $usr_disp = $this->Usuario->user_by_id($this->session->userdata('id'));
+    $usr_noti = $this->Usuario->user_by_id($usuario_seguido['id']);
 
     $mensaje = 'El usuario '.$usr_disp['nick'].' sigue tus publicaciones';
     $enlace  = '/usuarios/perfil/'.$usr_disp['nick'];

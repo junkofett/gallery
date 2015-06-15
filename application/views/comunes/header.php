@@ -3,8 +3,9 @@
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1 class="show-for-medium-up"><?= anchor('inicio', img(base_url().'images/logo.svg')) ?></h1>
-          <h1 class="show-for-small-only"><?= anchor('inicio', img(base_url().'images/imagotipo.svg')) ?></h1>
+          <h1 class="show-for-medium-up"><?= anchor('inicio', img('images/logo.svg')) ?></h1>
+          <h1 class="show-for-small-only"><?= anchor('inicio', img('images/imagotipo.svg'),
+                    ['class' => "left-off-canvas-toggle"]) ?></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. 
          Take out "Menu" to just have icon alone -->
@@ -32,7 +33,8 @@
             <li class="has-dropdown">
               <a href="#"><?= $this->session->userdata('nick') ?></a>
               <ul class="dropdown">
-                <li><a href="#">Editar Perfil</a></li>
+                <li><?= anchor('usuarios/perfil/'.$this->session->userdata('nick'), 'Ver Perfil') ?></li>
+                <li><?= anchor('imagenes/favoritos', 'Ver Favoritos') ?></li>
                 <li><?= anchor('imagenes/upload', 'Subir Imagen') ?></li>
                 <li><?= anchor('usuarios/logout', 'Logout') ?></li>
               </ul>

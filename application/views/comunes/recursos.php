@@ -123,14 +123,45 @@
     $(this).next('ul').slideDown();
   });
 
+//------------------------------------------------------------------------PERFIL
+
   $('.sala-user').on('click', function () {
     var ev = $(this);
 
     $.post("<?= base_url() . 'index.php/ajax/imgs_by_user/' ?>"+ ev.find('input').val(),
       {'<?= $this->security->get_csrf_token_name(); ?>' : 
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
-        //$('.clearing-thumbs').remove();
+        $('.clearing-thumbs').remove();
+        $('#seguidos-user').remove();
         $('.tabs-content').append(data);
+
+        ref_raty();
+    });
+  });
+
+  $('.favs-user').on('click', function () {
+    var ev = $(this);
+
+    $.post("<?= base_url() . 'index.php/ajax/favs_by_user/' ?>"+ ev.find('input').val(),
+      {'<?= $this->security->get_csrf_token_name(); ?>' : 
+       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        $('.clearing-thumbs').remove();
+        $('#seguidos-user').remove();
+        $('.tabs-content').append(data);
+
+        ref_raty();
+    });
+  });
+
+  $('.follows-user').on('click', function () {
+    var ev = $(this);
+
+    $.post("<?= base_url() . 'index.php/ajax/users_seguidos/' ?>"+ ev.find('input').val(),
+      {'<?= $this->security->get_csrf_token_name(); ?>' : 
+       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        $('.clearing-thumbs').remove();
+        $('#seguidos-user').remove();
+        $('.tabs-content').append(data);        
     });
   });
 
