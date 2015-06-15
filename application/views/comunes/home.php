@@ -4,9 +4,12 @@
     <!-- Off Canvas Menu -->
     <aside class="left-off-canvas-menu">
         <!-- whatever you want goes here -->
-      <ul class="off-canvas-list">
-        <li class="has-submenu"><a href="#">Todas las categorias</a>
+      <ul class="off-canvas-list" id="offcanvas_cat">
+        <li class="has-submenu">
+          <input type="hidden" value="0">
+          <a href="#">Todas las categorias</a>
           <ul class="left-submenu">
+            <input type="hidden" value="0">
             <li class="back"><a href="#">atras</a></li>
             <?= $offcanvas ?>
           </ul>

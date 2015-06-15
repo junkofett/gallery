@@ -349,7 +349,9 @@ class Imagen extends CI_Model{
 
       if(isset($cat['subcats'])):
         $canvas .= '<ul class="left-submenu">
-                      <li class="back"><a href="#">atras</a></li>';
+                      <li class="back">
+                        <input type="hidden" value="'.$cat['id'].'">
+                      <a href="#">atras</a></li>';
         $canvas .= $this->offcanvas_categorias($cat['subcats']);
         $canvas .= '</ul>';
       endif;

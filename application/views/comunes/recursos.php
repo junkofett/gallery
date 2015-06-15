@@ -44,6 +44,29 @@
     });
   }
 
+  function favoritear(){
+    $('.fav-button').on('click', function(){
+      if(!is_logged()){
+        $('#reg-login').foundation('reveal', 'open');
+      }else{
+        var ev = $(this);
+        var img_id = ev.parent().parent().parent().find('.img_id').val();
+  
+        $.ajax({
+            url: "<?= base_url() . 'index.php/ajax/add_fav' ?>",
+            data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                            '<?= $this->security->get_csrf_hash(); ?>',
+                    "img_id" : img_id},
+            type: 'POST',
+            async: false,
+            success: function(data) {
+  
+            }
+        });
+      }
+    });
+  }
+
   function reset_cont(){
     var cont = $('#cont-noti');
     
@@ -60,6 +83,21 @@
 
   }
 
+  function update_gallery(ev){
+    $('#contents').slideUp(300, function(){
+      $('.clearing-thumbs').remove();
+      $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.prev('input').val(),
+      {'<?= $this->security->get_csrf_token_name(); ?>' : 
+       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
+        
+        $('#contents').append(data);
+        ref_raty();
+        favoritear();
+        $('#contents').slideDown(300);
+      });
+    });
+  }
+
   function centrarForm() {
     $("#cont-form").css({
       "top": (($('#reg-form').height() / 2) - ($('#cont-form').height() / 2)) + "px",
@@ -69,6 +107,7 @@
   }
 
   centrarForm();
+  favoritear();
   ref_raty();
 
   $(window).resize(function() {
@@ -77,20 +116,16 @@
 
   $('#contents').slideDown(300);
 
+  $('#offcanvas_cat a').on('click', function(e) {
+    var ev = $(this);
+
+    update_gallery(ev);
+  });
+
   $("#cat-menu div").on("click", function (e) {
     var ev = $(this);
 
-    $('#contents').slideUp(300, function(){
-      $('.clearing-thumbs').remove();
-      $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.prev('input').val(),
-      {'<?= $this->security->get_csrf_token_name(); ?>' : 
-       '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
-        
-        $('#contents').append(data);
-        ref_raty();
-        $('#contents').slideDown(300);
-      });
-    });
+    update_gallery(ev);
 
     $.getJSON("<?= base_url() . 'index.php/ajax/get_parents/' ?>"+ ev.prev('input').val(),
       {'<?= $this->security->get_csrf_token_name(); ?>' : 
@@ -135,6 +170,7 @@
         $('#seguidos-user').remove();
         $('.tabs-content').append(data);
 
+        favoritear();
         ref_raty();
     });
   });
@@ -149,6 +185,7 @@
         $('#seguidos-user').remove();
         $('.tabs-content').append(data);
 
+        favoritear();
         ref_raty();
     });
   });
@@ -231,27 +268,6 @@
         {'<?= $this->security->get_csrf_token_name(); ?>' : 
          '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
           ev.html('Siguiendo');
-      });
-    }
-  });
-
-  $('.fav-button').on('click', function(){
-    if(!is_logged()){
-      $('#reg-login').foundation('reveal', 'open');
-    }else{
-      var ev = $(this);
-      var img_id = ev.parent().parent().parent().find('.img_id').val();
-
-      $.ajax({
-          url: "<?= base_url() . 'index.php/ajax/add_fav' ?>",
-          data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
-                          '<?= $this->security->get_csrf_hash(); ?>',
-                  "img_id" : img_id},
-          type: 'POST',
-          async: false,
-          success: function(data) {
-
-          }
       });
     }
   });
