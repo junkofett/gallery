@@ -300,11 +300,12 @@ class Imagen extends CI_Model{
     foreach ($categorias as $cat):
       $radios .= '<li>'.
                     form_radio(['value' => $cat['id'],
-                                'name'  => 'categoria']) . $cat['nombre_cat'];
+                                'name'  => 'categoria',
+                                'required' => 'required']) . $cat['nombre_cat'];
       
       if(isset($cat['subcats'])):
         $radios .= '<ul>';
-        $radios .= $this->radio_categorias($cat['subcats']);
+        $radios .=    $this->radio_categorias($cat['subcats']);
         $radios .= '</ul>';
       endif;
 
@@ -350,7 +351,7 @@ class Imagen extends CI_Model{
       if(isset($cat['subcats'])):
         $canvas .= '<ul class="left-submenu">
                       <li class="back">
-                        <input type="hidden" value="'.$cat['id'].'">
+                        <input type="hidden" value="'.$cat['padre_id'].'">
                       <a href="#">atras</a></li>';
         $canvas .= $this->offcanvas_categorias($cat['subcats']);
         $canvas .= '</ul>';
@@ -360,5 +361,13 @@ class Imagen extends CI_Model{
     endforeach;
 
     return $canvas;    
+  }
+
+  public function borrar($img_id){
+    if($this->Usuario->is_owner($img_id) || $this->Usuario->is_admin()):
+      return $this->db->delete('imagenes', ['id' => $img_id]);
+    else:
+      redirect('inicio');
+    endif;
   }
 }

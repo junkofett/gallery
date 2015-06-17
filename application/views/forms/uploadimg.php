@@ -9,14 +9,16 @@
       <div class="row">
         <div class="large-12 columns">
           <?= form_label('Titulo', 'titulo') ?>
-          <?= form_input(['name' => 'titulo']) ?>
+          <?= form_input(['name' => 'titulo',
+                          'required' => 'required']) ?>
           <?= form_label('Descripción', 'descripcion') ?>
           <?= form_input(['name' => 'descripcion']) ?>
           <?= form_label('Selecciona Imagen', 'imagen') ?>
-          <?= form_upload(['name' => 'imagen']) ?>
+          <?= form_upload(['name' => 'imagen',
+                          'required' => 'required']) ?>
           <?= form_label('Etiquetas', 'etiquetas') ?>
           <?= form_input(['name' => 'etiquetas']) ?>
-          <?= form_checkbox('nsfw', 'nsfw');?>
+          <?= form_checkbox('nsfw', 'nsfw') ?>
           <?= form_label('Contenido Adulto', 'nsfw') ?>
           <?= form_submit(['name'  => 'subir', 
                            'value' => 'Subir',

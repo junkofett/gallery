@@ -51,6 +51,13 @@ class Usuario extends CI_Model{
     return $this->db->get_where('usuarios', ['nick' => $nick])->row_array();
   }
 
+  public function user_by_img($img_id){
+    $res = $this->db->get_where('imagenes', ['id' => $img_id])
+                    ->result_array();
+
+    return $this->user_by_id($res[0]['usuarios_id']);
+  }
+
   public function is_logged(){
     if($this->session->userdata('nick'))
       return TRUE;
@@ -60,7 +67,13 @@ class Usuario extends CI_Model{
 
   public function is_admin(){
     if($this->is_logged()):
-      if($this->session->userdata('id') === 0):
+      $this->db->from('usuarios');
+      $this->db->where('nom_rol', 'admin');
+      $this->db->where('id', $this->session->userdata('id'));
+
+      $res = $this->db->get();
+
+      if($res->num_rows() > 0):
         return TRUE;
       else:
         return FALSE;
@@ -172,5 +185,52 @@ class Usuario extends CI_Model{
     else:
       return FALSE;
     endif;
+  }
+
+  public function get_like($user_like){
+    $this->db->from('usuarios');
+    $this->db->like('nick', $user_like);
+    $this->db->where_not_in('nom_rol', 'admin');
+
+    $res = $this->db->get();
+
+    return $res->result_array();
+  }
+
+  public function get_all(){
+    if(!$this->Usuario->is_admin()) return FALSE;
+    
+    $this->db->from('usuarios');
+    $this->db->where_not_in('nom_rol', 'admin');
+    $res = $this->db->get();
+
+    return $res->result_array();
+  }
+
+  public function borrar($nick){
+    if(!$this->Usuario->is_admin()) redirect('inicio');
+    if(!$this->Usuario->existe_nick($nick)) redirect('admin/usuarios');
+
+    return $this->db->delete('usuarios', ['nick' => $nick]);
+  }
+
+  public function is_self($nick){
+    if(!$this->Usuario->is_logged()) return FALSE;
+    if(!$this->Usuario->existe_nick($nick)) return FALSE;
+    if($this->session->userdata('nick') == $nick) return TRUE;
+  }
+
+  public function update($data, $user_id){
+    /*if($this->Usuario->is_self($img_id) || $this->Usuario->is_admin()):
+      return $this->db->delete('imagenes', ['id' => $img_id]);
+    else:
+      redirect('inicio');
+    endif;*/
+    foreach ($data as $key => $value):
+      $this->db->set($key, $value);    
+    endforeach;
+
+    $this->db->where('id', $user_id);
+    $this->db->update('usuarios', $data);
   }
 }

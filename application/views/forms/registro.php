@@ -7,9 +7,9 @@
           <div class="large-6 columns">
             <?= form_label('Nick', 'nick') ?>
             <?= form_input('nick', set_value('nick')) ?> <br>
-            <?= form_label('Pass', 'pass') ?>
+            <?= form_label('Password', 'pass') ?>
             <?= form_password('pass') ?> <br>
-            <?= form_label('Confirma Pass', 'passconf') ?>
+            <?= form_label('Confirmar Pass', 'passconf') ?>
             <?= form_password('passconf') ?> <br>
           </div>
           <div class="large-6 columns">
@@ -18,14 +18,15 @@
                             'type' => 'email',
                             'required' => 'required',
                             'value' => '']) ?> <br>
-            <?= form_label('Confirma e-mail', 'confemail') ?>
+            <?= form_label('Confirmar e-mail', 'confemail') ?>
             <?= form_input(['name' => 'confemail',
                             'type' => 'email',
                             'required' => 'required',
                             'value' => '']) ?> <br>
             <?= form_label('Fecha de Nacimiento', 'fecha_nac') ?>
             <?= form_input(['type' => 'date',
-                            'name' => 'fecha_nac']) ?>
+                            'name' => 'fecha_nac'
+                            'requried' => 'required']) ?>
           </div>
         </div>
         <div class="row text-center">

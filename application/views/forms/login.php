@@ -2,8 +2,10 @@
   <div class="large-center columns">
     <?= form_open('usuarios/login', ['id' => 'login-form']) ?>
       <?= form_label('Nick', 'nick') ?>
-      <?= form_input('nick', set_value('nick')) ?>
-      <?= form_label('Pass', 'pass') ?>
+      <?= form_input(['name' => 'nick', 
+                      'value' => set_value('nick'),
+                      'required' => 'required']) ?>
+      <?= form_label('Password', 'pass') ?>
       <?= form_password('pass') ?> <br>
       <div class="large-text-center">
       <?= form_submit(['name'  => 'login',

@@ -1,7 +1,11 @@
-<ul class='clearing-thumbs small-block-grid-4'>
+<ul class='clearing-thumbs large-block-grid-4 small-block-grid-2'>
 <?php foreach ($imagenes as $imagen): ?>
   <li class='prev'>
     <div class="imagen">
+      <?php  if($this->Usuario->is_owner($imagen['id']) || $this->Usuario->is_admin()):?>
+          <?= anchor('imagenes/borrar/'.$imagen['id'], 
+                        '<i class="fa fa-trash"></i>', ['class' => 'button tiny expand']) ?>
+      <?php  endif; ?>
       <div class="row">
         <div class="large-11 columns">
           <?= anchor('imagenes/imagen/'.$imagen['id'], img($imagen['thumb_url'])) ?>
@@ -18,9 +22,9 @@
         </div>
         <div class="large-6 columns">
         <?php if(!$imagen['fav']): ?>
-          <button class="button tiny right fav-button"><i class="fa fa-heart"></i></button>
+          <button class="button tiny right expand fav-button"><i class="fa fa-heart"></i></button>
         <?php else: ?>
-          <button class="button tiny right fav-button disabled"><i class="fa fa-heart-o"></i></button>
+          <button class="button tiny right expand fav-button disabled"><i class="fa fa-heart-o"></i></button>
         <?php endif; ?>
         </div>
       </div>

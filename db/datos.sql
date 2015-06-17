@@ -1,3 +1,5 @@
+insert into roles(nom_rol) values('admin'), ('reg_user');
+
 insert into usuarios (nick, pass, email, descripcion_usr, fecha_nac)
   values('tohad', md5('tohad'), 'tohad@gmail.com', 
   '2015 begin in France with the murder of cartoonists, journalists, 
@@ -105,6 +107,11 @@ insert into usuarios (nick, pass, email, descripcion_usr, fecha_nac)
 
   ('patrickbrown', md5('patrickbrown'), 'patrick@brown.com', NULL,
   to_timestamp('13 06 1992', 'DD MM YYYY'));
+
+
+insert into usuarios (nick, pass, email, fecha_nac, nom_rol)
+  values ('admin', md5('admin'), 'admin@admin.com',
+  to_timestamp('08 07 1984', 'DD MM YYYY'), 'admin');
 
 --BLOQUE CATEGORIAS
 insert into categorias (id, nombre_cat, padre_id)

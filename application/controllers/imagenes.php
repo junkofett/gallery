@@ -199,4 +199,45 @@ class Imagenes extends CI_Controller {
       redirect('imagenes/upload');
     endif;
   }
+
+  public function borrar($id){
+    //COMPROBAR QUE IMAGEN EXISTE
+    if($this->Usuario->is_owner($id) || $this->Usuario->is_admin()):
+      $imagen = $this->Imagen->img_por_id($id);
+
+      $head['titulo'] = 'Borrar imagen - '. $imagen['titulo'];
+      $data['imagen'] = $imagen;
+
+      $this->load->view('comunes/head', $head);
+      $this->load->view('comunes/header', $this->Navheader->get_header());
+      $this->load->view('admin/borrar_imagen', $data);
+      $this->load->view('comunes/recursos');
+    else:
+      redirect('inicio');
+    endif;
+  }
+
+  public function conf_borrar($img_id){
+    //COMPROBAR QUE IMAGEN EXISTE
+    if($this->Usuario->is_owner($img_id) || $this->Usuario->is_admin()):
+      $user = $this->Usuario->user_by_img($img_id);
+
+      if($this->Imagen->borrar($img_id)):
+        redirect('usuarios/perfil/'. $user['nick']);
+      else:
+        $this->error('No pudo borrarse la imagen');
+      endif;
+    endif;
+  }
+
+  private function error($mensaje){
+
+    $head['titulo'] = 'Error';
+    $data['mensaje']  = $mensaje;
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('admin/error', $data);
+    $this->load->view('comunes/recursos');
+  }
 }

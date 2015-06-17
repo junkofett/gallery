@@ -1,6 +1,10 @@
 <section role="main" class="scroll-container">
   <div class="row margin-row">
     <div class="large-8 columns large-text-center">
+      <?php  if($this->Usuario->is_owner($imagen['id']) || $this->Usuario->is_admin()):?>
+        <?= anchor('imagenes/borrar/'.$imagen['id'], 
+                   '<i class="fa fa-trash"></i>', ['class' => 'button tiny expand']) ?>
+      <?php  endif; ?>
       <?= img(['src' => $imagen['img_url'], 'id' => 'sngl-img']) ?>
       <div class="row">
         <div class="large-6 columns">
@@ -22,9 +26,9 @@
         </div>
         <div class="large-3 columns">
         <?php if(!$fav): ?>
-          <button class="button tiny right fav-button"><i class="fa fa-heart"></i></button>
+          <button class="button tiny right expand fav-button"><i class="fa fa-heart"></i></button>
         <?php else: ?>
-          <button class="button tiny fav-button disabled"><i class="fa fa-heart-o"></i></button>
+          <button class="button tiny right expand fav-button disabled"><i class="fa fa-heart-o"></i></button>
         <?php endif; ?>
         </div>
       </div>

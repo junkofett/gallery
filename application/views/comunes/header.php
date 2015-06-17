@@ -15,7 +15,7 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <?php if($this->session->userdata('nick') != NULL): ?>
+          <?php if($this->Usuario->is_logged() != NULL): ?>
             <li class="has-dropdown">
               <a href="#" id="notificaciones"> <i class="fa fa-server"></i> 
                 <?php if (isset($cont_noti) ): ?>
@@ -33,6 +33,9 @@
             <li class="has-dropdown">
               <a href="#"><?= $this->session->userdata('nick') ?></a>
               <ul class="dropdown">
+                <?php if($this->Usuario->is_admin()): ?>
+                <li><?= anchor('admin/usuarios', 'Administrar Usuarios') ?></li>
+                <?php endif; ?>
                 <li><?= anchor('usuarios/perfil/'.$this->session->userdata('nick'), 'Ver Perfil') ?></li>
                 <li><?= anchor('imagenes/favoritos', 'Ver Favoritos') ?></li>
                 <li><?= anchor('imagenes/upload', 'Subir Imagen') ?></li>

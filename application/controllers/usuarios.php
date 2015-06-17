@@ -74,7 +74,7 @@ class Usuarios extends CI_Controller {
                   ),
                   array(
                     'field' => 'passconf',
-                    'label' => 'Confirma Pass',
+                    'label' => 'Confirmar Pass',
                     'rules' => 'trim|required'
                   ),
                   array(
@@ -84,7 +84,7 @@ class Usuarios extends CI_Controller {
                   ),
                   array(
                     'field' => 'confemail',
-                    'label' => 'Confirma e.mail',
+                    'label' => 'Confirmar e.mail',
                     'rules' => 'trim|required'
                   ),
                   array(
@@ -133,6 +133,76 @@ class Usuarios extends CI_Controller {
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $this->Navheader->get_header());
     $this->load->view('usuario/usuario', $data);
+    $this->load->view('comunes/recursos');
+  }
+
+  public function editar($nick){
+    if($this->Usuario->is_self($nick) || $this->Usuario->is_admin()):
+      if($this->input->post('editar')):
+        $reglas = array(
+                  array(
+                    'field' => 'descripcion_usr',
+                    'label' => 'Descripcion',
+                    'rules' => 'trim'
+                  ),
+                  array(
+                    'field' => 'fecha_nac',
+                    'label' => 'Fecha de Nacimiento',
+                    'rules' => 'trim'
+                  )
+                );
+
+        $this->form_validation->set_rules($reglas);
+
+        if($this->form_validation->run()):
+          $user = $this->Usuario->user_by_nick($nick);
+          $data = [];
+
+          if($this->input->post('descripcion_usr') != $user['descripcion_usr'])
+            $data['descripcion_usr'] = $this->input->post('descripcion_usr');
+
+          if($this->input->post('fecha_nac') != $this->input->post('fecha_nac'))
+            $data['fecha_nac'] = $user['fecha_nac'];
+
+          if(empty($data)):
+            redirect('usuarios/editar/'.$user['nick']);
+          else:
+            if(!$this->Usuario->update($data, $user['id']))
+              redirect('usuarios/perfil/'.$user['nick']);
+            else
+              $this->error('No pudo actualizarse el usuario');
+          endif;
+        else:
+          $head['titulo'] = 'Editar usuario- '. $nick;
+          $data['user']   = $this->Usuario->user_by_nick($nick);
+
+          $this->load->view('comunes/head', $head);
+          $this->load->view('comunes/header', $this->Navheader->get_header());
+          $this->load->view('usuario/editar', $data);
+          $this->load->view('comunes/recursos');
+        endif;
+      else:
+        $head['titulo'] = 'Editar usuario- '. $nick;
+        $data['user']   = $this->Usuario->user_by_nick($nick);
+
+        $this->load->view('comunes/head', $head);
+        $this->load->view('comunes/header', $this->Navheader->get_header());
+        $this->load->view('usuario/editar', $data);
+        $this->load->view('comunes/recursos');
+      endif;
+    else:
+      redirect('inicio');
+    endif;
+  }
+
+  private function error($mensaje){
+
+    $head['titulo'] = 'Error';
+    $data['mensaje']  = $mensaje;
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('admin/error', $data);
     $this->load->view('comunes/recursos');
   }
 }

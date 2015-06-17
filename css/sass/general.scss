@@ -3,6 +3,7 @@ $lightpurple:   #694675;
 $lighterpurple: #A18DA9;
 $blue:          #057aa7;
 $orange:        #FF8500;
+$darkorange:    #9B5100;
 $darkblue:      #024A65;
 $green:         #9fb10c;
 $pink:          #ec145a;
@@ -48,6 +49,8 @@ a:link{color: $purple;}
 }
 
 //-----------------------------------------------------------FORMULARIOS + MODAL
+
+#modalTitle{color: lightgray;}
 
 #reg-form{min-height: 100%;
   background: url("../images/gallerylogo.svg"),linear-gradient($lightpurple 70%, $pink);
@@ -165,17 +168,17 @@ ul[class=dropdown]{
   }
 
   .button{text-align: left;
-    background-color: $blue;
+    background-color: $darkorange;
     padding-bottom: 0.2em;
-    box-shadow: 1px 1px 1px $darkblue;
+    box-shadow: 1px 1px 1px $orange;
   }
 
   .button:hover{
-    box-shadow: 3px 3px 3px $darkblue;
+    box-shadow: 3px 3px 3px $darkorange;
   }
 
   .cat-sel{
-    background-color: $green;
+    background-color: $orange;
   }
 }
 
@@ -279,3 +282,19 @@ section[role="main"]{padding-top: 1em;}
            text-shadow: 2px 2px $purple;}
 
 .seguido{padding: 1em;}
+
+//----------------------------------------------------------------ADMIN
+#admin-users{
+  max-width: 80%;
+}
+
+.user-admin{
+  padding: 1em;
+  background-color: $lighterpurple;
+  
+  .left{color: $pink;}
+
+  .button{
+    box-shadow: 1px 1px 1px $purple;
+  }
+}

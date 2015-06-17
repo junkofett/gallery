@@ -24,10 +24,10 @@ drop table if exists seguidores cascade;
 
 create table seguidores(
   usuarios_id     bigint  constraint fk_seguidores_usuarios_id
-                            references usuarios(id) on delete no action
+                            references usuarios(id) on delete cascade
                             on update cascade,
   seguidos_id   bigint  constraint fk_seguidores_seguidos_id
-                            references usuarios(id) on delete no action
+                            references usuarios(id) on delete cascade
                             on update cascade,
 
   constraint pk_seguidores primary key (usuarios_id, seguidos_id)
@@ -39,7 +39,7 @@ create table fotos(
   id            bigserial     constraint pk_fotos primary key,
   foto_url      varchar(200)  not null,
   usuarios_id   bigint        constraint fk_fotos_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade
 );
 
@@ -49,7 +49,7 @@ create table fondos(
   id            bigserial     constraint pk_fondos primary key,
   fondo_url     varchar(200)  not null,
   usuarios_id   bigint        constraint fk_fotos_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade
 );
 
@@ -79,7 +79,7 @@ create table imagenes(
   img_url           text          not null,
   thumb_url         text          not null,
   usuarios_id       bigint        constraint fk_imagenes_usuarios_id
-                                      references usuarios(id) on delete no action
+                                      references usuarios(id) on delete cascade
                                       on update cascade,
   categorias_id     bigint        constraint fk_imagenes_categorias_is
                                       references categorias(id) on delete no action
@@ -94,10 +94,10 @@ drop table if exists comentarios cascade;
 create table comentarios(
   id            bigserial     constraint pk_comentarios primary key,
   usuarios_id   bigint        constraint fk_comentarios_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade,
   imagenes_id   bigint        constraint fk_imagenes_imagenes_id
-                                  references imagenes(id) on delete no action
+                                  references imagenes(id) on delete cascade
                                   on update cascade,
   texto         text          not null,
   fecha_com     timestamp     default current_timestamp
@@ -108,7 +108,7 @@ drop table if exists notificaciones cascade;
 create table notificaciones(
   id            bigserial     constraint pk_notificaciones primary key,
   usuarios_id   bigint        constraint fk_notificaciones_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade,
   texto         varchar(200)  not null,
   notif_url     varchar(200)  not null,
@@ -120,10 +120,10 @@ drop table if exists puntuaciones cascade;
 
 create table puntuaciones(
   usuarios_id   bigint        constraint fk_puntuaciones_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade,
   imagenes_id   bigint        constraint fk_puntuaciones_imagenes_id
-                                  references imagenes(id) on delete no action
+                                  references imagenes(id) on delete cascade
                                   on update cascade,
   valoracion    numeric(1)    not null,
 
@@ -136,7 +136,7 @@ create table carpetas_usuarios(
   id            bigserial     constraint pk_carpetas_usuarios primary key,
   carpeta_nom   varchar(50)   not null,
   usuarios_id   bigint        constraint fk_carpetas_usuarios_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade,
   padre_id      bigint        constraint fk_carpetas_usuarios_padre_id
                                   references carpetas_usuarios(id) 
@@ -148,10 +148,10 @@ drop table if exists favoritos cascade;
 
 create table favoritos(
   usuarios_id   bigint        constraint fk_favoritos_usuarios_id
-                                  references usuarios(id) on delete no action
+                                  references usuarios(id) on delete cascade
                                   on update cascade,
   imagenes_id   bigint        constraint fk_favoritos_imagenes_id
-                                  references imagenes(id) on delete no action
+                                  references imagenes(id) on delete cascade
                                   on update cascade,
   carpeta_id    bigint        constraint fk_favoritos_carpeta_id
                                   references carpetas_usuarios(id) 
@@ -163,7 +163,7 @@ drop table if exists imgs_etiquetas cascade;
 
 create table imgs_etiquetas(
   imagenes_id   bigint        constraint fk_imgs_etiquetas_imagenes_id
-                                  references imagenes(id) on delete no action
+                                  references imagenes(id) on delete cascade
                                   on update cascade,
   etiquetas_id  bigint        constraint fk_imgs_etiquetas_etiquetas_id
                                   references etiquetas(id) on delete no action

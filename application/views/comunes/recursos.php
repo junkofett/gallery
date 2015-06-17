@@ -1,10 +1,7 @@
-<?= link_tag('css/foundation.css') ?>
-<?= link_tag('css/general.css') ?>
-<?= link_tag('css/font-awesome-4.3.0/css/font-awesome.min.css') ?>
-<?= link_tag('js/raty/jquery.raty.css') ?>
 <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
+<script type="text/javascript" src=<?= base_url().'js/jquery.validate.min.js'?>></script>
 <div id="reg-login" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
   <h3 id="modalTitle">Debes estar logueado para realizar esta acción</h3>
   <?= anchor('/usuarios/registro', '<button class="button">Registrate!</button>') ?>
@@ -12,6 +9,7 @@
 </div>
 <script type="text/javascript">
   $(document).foundation();
+  $("form").validate();
 
   function is_logged(){
     var is_logged = false;

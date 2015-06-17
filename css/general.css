@@ -29,6 +29,9 @@ a:link {
   .valign-middle > .columns, .valign-middle > [class*="column"] + [class*="column"]:last-child {
     float: none; }
 
+#modalTitle {
+  color: lightgray; }
+
 #reg-form {
   min-height: 100%;
   background: url("../images/gallerylogo.svg"), linear-gradient(#694675 70%, #ec145a);
@@ -114,13 +117,13 @@ ul[class=dropdown] li {
       padding-left: 0.4em; }
   #categorias .button {
     text-align: left;
-    background-color: #057aa7;
+    background-color: #9B5100;
     padding-bottom: 0.2em;
-    box-shadow: 1px 1px 1px #024A65; }
+    box-shadow: 1px 1px 1px #FF8500; }
   #categorias .button:hover {
-    box-shadow: 3px 3px 3px #024A65; }
+    box-shadow: 3px 3px 3px #9B5100; }
   #categorias .cat-sel {
-    background-color: #9fb10c; }
+    background-color: #FF8500; }
 
 #cat-menu li ul {
   display: none;
@@ -207,5 +210,16 @@ section[role="main"] {
 
 .seguido {
   padding: 1em; }
+
+#admin-users {
+  max-width: 80%; }
+
+.user-admin {
+  padding: 1em;
+  background-color: #A18DA9; }
+  .user-admin .left {
+    color: #ec145a; }
+  .user-admin .button {
+    box-shadow: 1px 1px 1px #340245; }
 
 /*# sourceMappingURL=general.css.map */
