@@ -30,7 +30,7 @@ class Admin extends CI_Controller {
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $this->Navheader->get_header());
-    $this->load->view('admin/borrar', $data);
+    $this->load->view('admin/borrar_usuario', $data);
     $this->load->view('comunes/recursos');
   }
 

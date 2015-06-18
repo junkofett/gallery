@@ -24,10 +24,10 @@
   </div>
   <div class="row">
     <div class="large-6 columns">
-    <?= form_submit('editar', 'Aplicar', 'class = "button expand"') ?>
+      <?= form_submit('editar', 'Aplicar', 'class = "button expand"') ?>
     </div>
     <div class="large-6 columns">
-    <?= anchor('usuarios/perfil/'.$user['nick'], 'Volver al perfil', ['class' => 'button expand']) ?>
+      <?= anchor('usuarios/perfil/'.$user['nick'], 'Volver al perfil', ['class' => 'button expand']) ?>
     </div>
     <?= form_close() ?>
   </div>

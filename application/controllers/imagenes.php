@@ -1,21 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Imagenes extends CI_Controller {
-  public function editar($img_id){
-    if(!$this->Usuario->is_owner($img_id)) redirect('inicio');
-    
-    $img        = $this->Imagen->img_por_id($img_id);
-    $categorias = $this->Imagen->arbol(NULL);
-    $radio_cat  = '<ul>'. $this->Imagen->radio_categorias($categorias)  . '</ul>';
-
-    $data['img_url']         = $img['img_url'];
-    $data['nsfw']            = $img['nsfw'];
-    $data['descripcion_img'] = $img['descripcion_img'];
-    $data['radio_cat']       = $radio_cat;
-
-    $this->load->view('forms/editar', $data);
-  }
-
   public function imagen($id){
     //comprobar imagen existe
 
@@ -200,6 +185,70 @@ class Imagenes extends CI_Controller {
     endif;
   }
 
+  public function editar($id){
+    //COMPROBAR QUE IMAGEN EXISTE
+    if($this->Usuario->is_owner($id) || $this->Usuario->is_admin()):
+      $categorias = $this->Imagen->arbol(NULL);
+
+      $img = $this->Imagen->img_por_id($id);
+      $img['hashtags'] = $this->Imagen->get_hashtags($id);
+
+      $radio_cat = '<ul id="radio-cats">'. $this->Imagen->radio_categorias($categorias, $img['categorias_id'])  . '</ul>';
+
+      $head['titulo']    = 'Editar imagen - '. $img['titulo'];
+
+      $data['imagen']    = $img;
+      $data['radio_cat'] = $radio_cat;
+
+      if(!$this->input->post('editar')):
+        $this->load->view('comunes/head', $head);
+        $this->load->view('comunes/header', $this->Navheader->get_header());
+        $this->load->view('admin/editar_imagen', $data);
+        $this->load->view('comunes/recursos');
+      else:
+        $reglas = array(
+          array(
+            'field' => 'descripcion_img',
+            'label' => 'Descripcion',
+            'rules' => 'trim'
+          ),
+          array(
+            'field' => 'titulo',
+            'label' => 'Titulo',
+            'rules' => 'trim|required'
+          )
+        );
+
+        $data = [];
+
+        if($this->input->post('descripcion_img') && $this->input->post('descripcion_img') != $img['descripcion_img'])
+          $data['descripcion_img'] = $this->input->post('descripcion_img');
+
+        if($this->input->post('titulo') && $this->input->post('titulo') != $img['titulo'])
+          $data['titulo'] = $this->input->post('titulo');
+
+        if($this->input->post('categoria') && $this->input->post('categoria') != $img['categorias_id'])
+          $data['categorias_id'] = $this->input->post('categoria');
+
+        if($this->input->post('nuevas_ets')):
+          $this->Imagen->anadir_y_relacionar_hash($this->input->post('nuevas_ets'), $img['id']);
+        endif;
+
+        if(empty($data)):
+          redirect('imagenes/editar/'.$img['id']);
+        else:
+          if($this->Imagen->update($data, $img['id']))
+            redirect('imagenes/imagen/'.$img['id']);
+          else
+            $this->error('No pudo actualizarse la imagen');
+        endif;
+
+      endif;
+    else:
+      $this->error('No tiene permisos para editar esta imagen');
+    endif;
+  }
+
   public function borrar($id){
     //COMPROBAR QUE IMAGEN EXISTE
     if($this->Usuario->is_owner($id) || $this->Usuario->is_admin()):
@@ -213,7 +262,7 @@ class Imagenes extends CI_Controller {
       $this->load->view('admin/borrar_imagen', $data);
       $this->load->view('comunes/recursos');
     else:
-      redirect('inicio');
+      $this->error('No tiene permisos para borrar esta imagen');
     endif;
   }
 

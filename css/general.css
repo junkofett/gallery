@@ -49,6 +49,11 @@ a:link {
 #reg-login {
   background: linear-gradient(#694675 70%, #ec145a); }
 
+#radio-cats {
+  font-size: 1em; }
+  #radio-cats ul {
+    font-size: 1em; }
+
 nav.top-bar {
   box-shadow: 1px 1px 1px 2px #340245; }
   nav.top-bar, nav.top-bar .top-bar-section ul, nav.top-bar .top-bar-section li:not(.has-form) a:not(.button) {
@@ -121,7 +126,7 @@ ul[class=dropdown] li {
     padding-bottom: 0.2em;
     box-shadow: 1px 1px 1px #FF8500; }
   #categorias .button:hover {
-    box-shadow: 3px 3px 3px #9B5100; }
+    box-shadow: 3px 3px 3px #340245; }
   #categorias .cat-sel {
     background-color: #FF8500; }
 

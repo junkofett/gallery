@@ -221,15 +221,6 @@ class Usuario extends CI_Model{
   }
 
   public function update($data, $user_id){
-    /*if($this->Usuario->is_self($img_id) || $this->Usuario->is_admin()):
-      return $this->db->delete('imagenes', ['id' => $img_id]);
-    else:
-      redirect('inicio');
-    endif;*/
-    foreach ($data as $key => $value):
-      $this->db->set($key, $value);    
-    endforeach;
-
     $this->db->where('id', $user_id);
     $this->db->update('usuarios', $data);
   }

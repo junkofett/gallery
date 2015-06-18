@@ -43,8 +43,6 @@ class Imagen extends CI_Model{
     endif;
 
     if($fav !== NULL):
-      if(!$this->Usuario->is_logged()) redirect('inicio');
-
       $user_id = $fav;
       $this->db->join('favoritos f', 'f.imagenes_id = i.id');
       $this->db->where('f.usuarios_id', $user_id);
@@ -216,6 +214,22 @@ class Imagen extends CI_Model{
     endif;
   }
 
+  public function anadir_y_relacionar_hash($hashtags, $img_id){
+    $hashs = $this->Etiqueta->preg_split_hashs($hashtags);
+    //var_dump($hashs); die();
+    foreach ($hashs as $hash):
+      $hash    = substr($hash, 1);
+      $hash_id = $this->Etiqueta->check_and_add_hashtag($hash);
+      $this->relacionar_hash($hash_id, $img_id);
+    endforeach;
+  }
+
+  public function borrar_hash($hash, $img){
+    $this->db->where(['imagenes_id'  => $img,
+                      'etiquetas_id' => $hash]);
+    $this->db->delete('imgs_etiquetas');
+  }
+
   public function relacionar_hash($hash_id, $img_id){
     $this->db->insert('imgs_etiquetas', ['imagenes_id'  => $img_id,
                                          'etiquetas_id' => $hash_id]);
@@ -294,18 +308,19 @@ class Imagen extends CI_Model{
     return $return;
   }
 
-  public function radio_categorias($categorias){
+  public function radio_categorias($categorias, $cat_sel = NULL){
     $radios = '';
 
     foreach ($categorias as $cat):
       $radios .= '<li>'.
                     form_radio(['value' => $cat['id'],
                                 'name'  => 'categoria',
-                                'required' => 'required']) . $cat['nombre_cat'];
+                                'required' => 'required',
+                                'checked' => ($cat_sel === $cat['id'])? 'checked' : '']) . $cat['nombre_cat'];
       
       if(isset($cat['subcats'])):
         $radios .= '<ul>';
-        $radios .=    $this->radio_categorias($cat['subcats']);
+        $radios .=    $this->radio_categorias($cat['subcats'], $cat_sel);
         $radios .= '</ul>';
       endif;
 
@@ -351,7 +366,7 @@ class Imagen extends CI_Model{
       if(isset($cat['subcats'])):
         $canvas .= '<ul class="left-submenu">
                       <li class="back">
-                        <input type="hidden" value="'.$cat['padre_id'].'">
+                        <input type="hidden" value="'.(($cat['padre_id'] != NULL) ? $cat['padre_id'] : 0 ).'">
                       <a href="#">atras</a></li>';
         $canvas .= $this->offcanvas_categorias($cat['subcats']);
         $canvas .= '</ul>';
@@ -369,5 +384,10 @@ class Imagen extends CI_Model{
     else:
       redirect('inicio');
     endif;
+  }
+
+  public function update($data, $img_id){
+    $this->db->where('id', $img_id);
+    return $this->db->update('imagenes', $data);
   }
 }

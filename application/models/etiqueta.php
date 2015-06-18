@@ -22,6 +22,15 @@ class Etiqueta extends CI_Model{
     endif;
   }
 
+  public function existe($hash){
+    $res = $this->db->get_where('etiquetas', ['id' => $hash]);
+
+    if($res->num_rows() > 0)
+      return TRUE;
+    else
+      return FALSE;
+  }
+
   private function add_hashtag($nombre){
     $this->db->insert('etiquetas', ['nombre_et' => $nombre]);
     //devuelve id del ultimo inserto en la db

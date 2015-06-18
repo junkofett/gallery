@@ -5,6 +5,7 @@
       <?php  if($this->Usuario->is_owner($imagen['id']) || $this->Usuario->is_admin()):?>
           <?= anchor('imagenes/borrar/'.$imagen['id'], 
                         '<i class="fa fa-trash"></i>', ['class' => 'button tiny expand']) ?>
+          <?= anchor('imagenes/editar/'.$imagen['id'], 'Editar', ['class' => 'button tiny expand']) ?>
       <?php  endif; ?>
       <div class="row">
         <div class="large-11 columns">

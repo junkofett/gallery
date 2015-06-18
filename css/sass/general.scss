@@ -65,6 +65,14 @@ a:link{color: $purple;}
 #cont-form{position: absolute;}
 
 #reg-login{background: linear-gradient($lightpurple 70%, $pink);}
+#radio-cats{
+  font-size: 1em;
+  
+  ul{
+    font-size: 1em;
+  }
+
+}
 //-----------------------------------------------------------BARRA DE NAVEGACIÓN
 nav.top-bar {
  
@@ -174,7 +182,7 @@ ul[class=dropdown]{
   }
 
   .button:hover{
-    box-shadow: 3px 3px 3px $darkorange;
+    box-shadow: 3px 3px 3px $purple;
   }
 
   .cat-sel{

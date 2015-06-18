@@ -38,7 +38,7 @@ class Ajax extends CI_Controller {
 
     $data['imagenes'] = $this->Imagen->get_galeria(NULL, NULL, NULL, $usuario->id);
     $data['nick']     = $usuario->nick;
-
+    
     $this->load->view('galeria', $data);
   }
 
@@ -83,6 +83,18 @@ class Ajax extends CI_Controller {
       return FALSE;
     else:
       $this->Imagen->add_fav($img_id);
+    endif;
+  }
+
+  public function borrar_hash(){
+    if(!$this->is_logged()) return FALSE;
+    $hash = $this->input->post('hash_id');
+    $img  = $this->input->post('img_id');
+
+    if(($this->Usuario->is_owner($img) || $this->Usuario->is_admin() )&& $this->Etiqueta->existe($hash)):
+      return $this->Imagen->borrar_hash($hash, $img);
+    else:
+      return FALSE;
     endif;
   }
 }

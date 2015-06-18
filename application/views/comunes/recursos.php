@@ -1,5 +1,6 @@
 <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
+<script type="text/javascript" src=<?= base_url().'js/vendor/modernizr.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/jquery.validate.min.js'?>></script>
 <div id="reg-login" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
@@ -182,7 +183,7 @@
         $('.clearing-thumbs').remove();
         $('#seguidos-user').remove();
         $('.tabs-content').append(data);
-
+        
         favoritear();
         ref_raty();
     });
@@ -252,6 +253,26 @@
       }
 
       reset_cont();
+    }
+  });
+
+  $('.rem-hash').on('click', function(){
+    if(is_logged()){
+      var img_id  = $(this).find('input[name=img_id]').val();
+      var hash_id = $(this).find('input[name=hash_id]').val();
+
+      $.ajax({
+        url: "<?= base_url() . 'index.php/ajax/borrar_hash' ?>",
+        data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                        '<?= $this->security->get_csrf_hash(); ?>',
+                "img_id"  : img_id ,
+                "hash_id" : hash_id},
+        type: 'POST',
+        async: false,
+        success: function(data) {
+          console.log(data);
+        }
+      });
     }
   });
 
