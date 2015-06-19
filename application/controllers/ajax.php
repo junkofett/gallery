@@ -87,14 +87,19 @@ class Ajax extends CI_Controller {
   }
 
   public function borrar_hash(){
-    if(!$this->is_logged()) return FALSE;
     $hash = $this->input->post('hash_id');
     $img  = $this->input->post('img_id');
 
-    if(($this->Usuario->is_owner($img) || $this->Usuario->is_admin() )&& $this->Etiqueta->existe($hash)):
-      return $this->Imagen->borrar_hash($hash, $img);
+    if(($this->Usuario->is_owner($img) || $this->Usuario->is_admin()) && $this->Etiqueta->existe($hash)):
+      $this->Imagen->borrar_hash($hash, $img);
     else:
       return FALSE;
     endif;
+  }
+
+  public function borrar_notif(){
+    $notif_id = $this->input->post('notif_id');
+    
+    $this->Notificacion->ver_notif($notif_id);
   }
 }

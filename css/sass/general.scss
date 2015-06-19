@@ -306,3 +306,37 @@ section[role="main"]{padding-top: 1em;}
     box-shadow: 1px 1px 1px $purple;
   }
 }
+
+ #lista_notif{
+  background-color: $darkorange;
+
+  .alert-box{
+    padding: 0px;
+    background-color: $darkorange;
+
+    a{
+      padding: 0px;
+      background-color: $darkorange;
+    }
+
+    .close{
+      //position: relative;
+      background-color: $darkorange;
+    }
+  }
+
+  .alert-box:hover{
+    padding: 0em;
+    background-color: $orange;
+
+    a{
+      background-color: $orange;
+    }
+
+    .close{
+      //position: relative;
+      background-color: $orange;
+    }
+  }
+
+ }

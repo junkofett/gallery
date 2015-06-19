@@ -25,7 +25,14 @@
             <?php if(isset($notificaciones)): ?>
               <ul class="dropdown" id="lista_notif">
                 <?php foreach ($notificaciones as $noti): ?>
-                  <li> <?= anchor($noti['notif_url'], $noti['texto']) ?> </li>
+                  <li> 
+                    <div data-alert class="alert-box">
+                      <?= form_hidden('notif_id', $noti['id']) ?>
+                      <?= anchor($noti['notif_url'], $noti['texto']) ?> 
+
+                       <a href="#" class="close notif-close">&times;</a>
+                    </div>
+                  </li>
                 <?php endforeach; ?>
               </ul>
             <?php endif; ?>
@@ -35,6 +42,7 @@
               <ul class="dropdown">
                 <?php if($this->Usuario->is_admin()): ?>
                 <li><?= anchor('admin/usuarios', 'Administrar Usuarios') ?></li>
+                <li><?= anchor('admin/categorias', 'Administrar Categorias') ?></li>
                 <?php endif; ?>
                 <li><?= anchor('usuarios/perfil/'.$this->session->userdata('nick'), 'Ver Perfil') ?></li>
                 <li><?= anchor('imagenes/favoritos', 'Ver Favoritos') ?></li>

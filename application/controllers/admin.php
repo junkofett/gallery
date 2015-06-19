@@ -6,6 +6,7 @@ class Admin extends CI_Controller {
   }
 
   public function usuarios(){
+    if(!$this->Usuario->is_admin()) redirect('inicio');
     if(!$this->input->post('busca_usuario')):
       $users = $this->Usuario->get_all();
     else:
@@ -45,4 +46,54 @@ class Admin extends CI_Controller {
     endif;
   }
 
+  public function categorias(){
+    if(!$this->Usuario->is_admin()) redirect('inicio');
+    
+    if($this->input->post('crear')):
+      $nombre = trim($this->input->post('nombre_cat'));
+      $padre  = $this->input->post('categoria');
+
+      if($nombre != '' && $this->Categoria->existe($padre))
+        $this->Categoria->anadir($nombre, $padre);
+
+      redirect('admin/categorias');
+    else:
+      if($this->input->post('borrar')):
+        if($this->Categoria->existe($this->input->post('categoria'))):
+          $cat_id = $this->input->post('categoria');
+
+          if(!$this->Categoria->tiene_hijos($cat_id))
+            $this->Categoria->borrar($cat_id);
+          else
+            $this->error('Debe borrar primero las categorias hijas', 'admin/categorias');
+        endif;
+      endif;
+    endif;
+
+    $categorias = $this->Imagen->arbol(NULL) ;
+    $radio_cat  = $this->Imagen->radio_categorias($categorias);
+
+    $head['titulo'] = 'Administrar categorias';
+
+    $data['radio_cat'] = $radio_cat;
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('admin/admin_categorias', $data);
+    $this->load->view('comunes/recursos');
+  }
+
+  private function error($mensaje, $enlace = NULL){
+
+    $head['titulo'] = 'Error';
+    $data['mensaje']  = $mensaje;
+
+    if($enlace !== NULL)
+      $data['enlace'] = $enlace;
+
+    $this->load->view('comunes/head', $head);
+    $this->load->view('comunes/header', $this->Navheader->get_header());
+    $this->load->view('admin/error', $data);
+    $this->load->view('comunes/recursos');
+  }
 }

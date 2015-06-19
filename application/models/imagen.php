@@ -56,6 +56,69 @@ class Imagen extends CI_Model{
     $imagenes   = [];
 
     foreach ($imgsnorate as $img):
+      if(isset($img['imagenes_id'])):
+        $img['img_id'] = $img['imagenes_id'];
+      else:
+        $img['img_id'] = $img['id'];
+      endif;
+
+      $img        = $this->add_rate($img);
+      $img['fav'] = $this->comprobar_fav($img['id']);
+      $imagenes[] = $this->add_hashtags($img, $boolhashview); 
+    endforeach;
+
+    return $imagenes;
+  }
+
+  public function get_galeriaaaaaaaaaaaa($user_id = NULL, $unnested = NULL, $etiqueta = NULL, $fav = NULL){
+    //resolver nsfw
+    //resolver paginacion
+
+    $boolhashview = FALSE;
+
+    $this->db->from('usuarios u');
+
+    if($user_id !== NULL):
+      if($this->Usuario->existe($user_id)):
+        $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+        $this->db->where('i.usuarios_id', $user_id);
+      endif;
+    else:
+      $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+    endif;
+
+    if($etiqueta !== NULL):
+      $this->db->join('imgs_etiquetas ie', 'i.id = ie.imagenes_id');
+      $this->db->join('etiquetas e', 'ie.etiquetas_id = e.id');
+      $this->db->where('e.id', $etiqueta['id']);
+
+      $boolhashview = TRUE;
+    endif;
+
+    if($unnested !== NULL):
+      foreach ($unnested as $key => $value):
+        if($key > 0):
+          $this->db->or_where('categorias_id =', $value);
+        else:
+          $this->db->where('categorias_id =', $value);
+        endif;
+      endforeach;
+    endif;
+
+    if($fav !== NULL):
+      $user_id = $fav;
+      $this->db->join('favoritos f', 'f.imagenes_id = i.id');
+      $this->db->where('f.usuarios_id', $user_id);
+    endif;
+
+    $this->db->where('nsfw', 'f', 20, 0);
+    $this->db->order_by('fecha_subida', 'desc');
+    $res = $this->db->get();
+
+    $imgsnorate = $res->result_array();
+    $imagenes   = [];
+
+    foreach ($imgsnorate as $img):
       $img        = $this->add_rate($img);
       $img['fav'] = $this->comprobar_fav($img['id']);
       $imagenes[] = $this->add_hashtags($img, $boolhashview); 
@@ -104,11 +167,10 @@ class Imagen extends CI_Model{
       $valor += $puntuacion['valoracion'];  
     endforeach;
 
-    if ($valor == 0):
+    if ($valor == 0)
       return 0;
-    else:
+    else
       return $valor / count($puntuaciones);
-    endif;
   }
 
   public function comentario_por($com_id){
@@ -216,7 +278,7 @@ class Imagen extends CI_Model{
 
   public function anadir_y_relacionar_hash($hashtags, $img_id){
     $hashs = $this->Etiqueta->preg_split_hashs($hashtags);
-    //var_dump($hashs); die();
+
     foreach ($hashs as $hash):
       $hash    = substr($hash, 1);
       $hash_id = $this->Etiqueta->check_and_add_hashtag($hash);
@@ -225,8 +287,8 @@ class Imagen extends CI_Model{
   }
 
   public function borrar_hash($hash, $img){
-    $this->db->where(['imagenes_id'  => $img,
-                      'etiquetas_id' => $hash]);
+    $this->db->where('imagenes_id', $img);
+    $this->db->where('etiquetas_id', $hash);
     $this->db->delete('imgs_etiquetas');
   }
 

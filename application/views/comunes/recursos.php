@@ -3,11 +3,14 @@
 <script type="text/javascript" src=<?= base_url().'js/vendor/modernizr.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/jquery.validate.min.js'?>></script>
+
+<?php if(!$this->session->userdata('id')): ?>
 <div id="reg-login" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
   <h3 id="modalTitle">Debes estar logueado para realizar esta acción</h3>
   <?= anchor('/usuarios/registro', '<button class="button">Registrate!</button>') ?>
   <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
+<?php endif; ?>
 <script type="text/javascript">
   $(document).foundation();
   $("form").validate();
@@ -248,8 +251,6 @@
             $('#nuevocomentario').val('');
           }
         });
-      }else{
-        alert('Debe rellenar el formulario');
       }
 
       reset_cont();
@@ -265,7 +266,7 @@
         url: "<?= base_url() . 'index.php/ajax/borrar_hash' ?>",
         data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
                         '<?= $this->security->get_csrf_hash(); ?>',
-                "img_id"  : img_id ,
+                "img_id"  : img_id,
                 "hash_id" : hash_id},
         type: 'POST',
         async: false,
@@ -287,6 +288,27 @@
         {'<?= $this->security->get_csrf_token_name(); ?>' : 
          '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
           ev.html('Siguiendo');
+      });
+    }
+  });
+
+  $('.notif-close').on('click', function(){
+    if(!is_logged()){
+      $('#reg-login').foundation('reveal', 'open');
+    }else{
+      var ev       = $(this);
+      var notif_id = ev.parent().find('input').val();
+
+      $.ajax({
+        url: "<?= base_url() . 'index.php/ajax/borrar_notif' ?>",
+        data: { '<?= $this->security->get_csrf_token_name(); ?>' : 
+                        '<?= $this->security->get_csrf_hash(); ?>',
+                "notif_id" : notif_id},
+        type: 'POST',
+        async: false,
+        success: function(data) {
+          console.log(data);
+        }
       });
     }
   });

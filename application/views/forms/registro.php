@@ -25,7 +25,7 @@
                             'value' => '']) ?> <br>
             <?= form_label('Fecha de Nacimiento', 'fecha_nac') ?>
             <?= form_input(['type' => 'date',
-                            'name' => 'fecha_nac'
+                            'name' => 'fecha_nac',
                             'requried' => 'required']) ?>
           </div>
         </div>

@@ -14,7 +14,7 @@ class Etiqueta extends CI_Model{
 
   public function check_and_add_hashtag($nombre){
     $res = $this->db->get_where('etiquetas', ['nombre_et' => $nombre]);
-
+    
     if ($res->num_rows() == 0):
       return $this->add_hashtag($nombre);
     else:

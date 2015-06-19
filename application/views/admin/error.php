@@ -6,7 +6,11 @@
     <h2>Error: <?= $mensaje ?></h2>
     <div class="row">
       <div class="large-12 columns">
-        <?= anchor('inicio', 'Volver a la galeria', ['class' => 'button expand']) ?>
+        <?php if(isset($enlace)):?>
+          <?= anchor($enlace, 'Volver', ['class' => 'button expand']) ?>
+        <?php else: ?>
+          <?= anchor('inicio', 'Volver a la galeria', ['class' => 'button expand']) ?>
+        <?php endif; ?>
       </div>
     </div>
   </div>

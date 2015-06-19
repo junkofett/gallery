@@ -38,7 +38,7 @@
 </div>
 <?php endif; ?>
 
-<div class='row' id="home">
+<div class='row<?= (isset($favs) || isset($hashtag_nom) ? " margin-row" : "") ?>' id="home">
   <?php if(isset($categorias)): ?>
   <?php $classcontents = "large-10 columns"; ?>
   <aside id="categorias" class='large-2 columns hide-for-small'>

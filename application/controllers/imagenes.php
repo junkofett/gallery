@@ -200,7 +200,7 @@ class Imagenes extends CI_Controller {
       $data['imagen']    = $img;
       $data['radio_cat'] = $radio_cat;
 
-      if(!$this->input->post('editar')):
+      if(!$this->input->post('aplicar')):
         $this->load->view('comunes/head', $head);
         $this->load->view('comunes/header', $this->Navheader->get_header());
         $this->load->view('admin/editar_imagen', $data);

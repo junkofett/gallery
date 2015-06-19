@@ -2,14 +2,14 @@
 <?php foreach ($imagenes as $imagen): ?>
   <li class='prev'>
     <div class="imagen">
-      <?php  if($this->Usuario->is_owner($imagen['id']) || $this->Usuario->is_admin()):?>
-          <?= anchor('imagenes/borrar/'.$imagen['id'], 
+      <?php  if($this->Usuario->is_owner($imagen['img_id']) || $this->Usuario->is_admin()):?>
+          <?= anchor('imagenes/borrar/'.$imagen['img_id'], 
                         '<i class="fa fa-trash"></i>', ['class' => 'button tiny expand']) ?>
-          <?= anchor('imagenes/editar/'.$imagen['id'], 'Editar', ['class' => 'button tiny expand']) ?>
+          <?= anchor('imagenes/editar/'.$imagen['img_id'], 'Editar', ['class' => 'button tiny expand']) ?>
       <?php  endif; ?>
       <div class="row">
         <div class="large-11 columns">
-          <?= anchor('imagenes/imagen/'.$imagen['id'], img($imagen['thumb_url'])) ?>
+          <?= anchor('imagenes/imagen/'.$imagen['img_id'], img($imagen['thumb_url'])) ?>
         </div>
         <input type="hidden" class="img_id" value=<?= $imagen['id'] ?>>
         <div class="large-1 columns raty-div">

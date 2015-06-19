@@ -165,6 +165,7 @@ class Usuario extends CI_Model{
     $this->db->select('count(*)');
     $this->db->from('notificaciones');
     $this->db->where('usuarios_id', $this->session->userdata('id'));
+    $this->db->where('vista', 'f');
     $res = $this->db->get()->row_array();
 
     if($res['count'] > 0):
@@ -210,6 +211,12 @@ class Usuario extends CI_Model{
   public function borrar($nick){
     if(!$this->Usuario->is_admin()) redirect('inicio');
     if(!$this->Usuario->existe_nick($nick)) redirect('admin/usuarios');
+
+    $user = new Usuario($nick);
+
+    $this->db->where('seguidos_id', $user->id);
+    $this->db->or_where('usuarios_id', $user->id);
+    $this->db->delete('notificaciones');
 
     return $this->db->delete('usuarios', ['nick' => $nick]);
   }

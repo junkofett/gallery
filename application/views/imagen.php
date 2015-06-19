@@ -34,6 +34,11 @@
         <?php endif; ?>
         </div>
       </div>
+      <div class="row">
+        <div class="large-text-center">
+          <?= $imagen['descripcion_img'] ?>
+        </div>
+      </div>
     </div>
     <div class="large-4 columns">
       <div class="row">

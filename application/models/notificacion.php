@@ -95,4 +95,9 @@ class Notificacion extends CI_Model{
       return FALSE;
     endif;
   }
+
+  public function ver_notif($notif_id){
+    $this->db->where('id', $notif_id);
+    $this->db->update('notificaciones', ['vista' => 't']);
+  }
 }

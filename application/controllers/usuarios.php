@@ -43,8 +43,7 @@ class Usuarios extends CI_Controller {
       $this->session->set_userdata('id', $usuario->id);
       redirect('inicio');
     }else{
-      $data['errores'][] = 'El usuario no existe';
-      $this->load->view('login', $data);
+      $this->error('El usuario no existe');
     }
   }
 

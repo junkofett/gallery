@@ -38,7 +38,7 @@
           </div>
           <?= form_checkbox('nsfw', 'nsfw') ?>
           <?= form_label('Contenido Adulto', 'nsfw') ?>
-          <?= form_submit(['name'  => 'editar', 
+          <?= form_submit(['name'  => 'aplicar', 
                            'value' => 'Aplicar',
                            'class' => 'button expand']) ?>
         

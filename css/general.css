@@ -227,4 +227,22 @@ section[role="main"] {
   .user-admin .button {
     box-shadow: 1px 1px 1px #340245; }
 
+#lista_notif {
+  background-color: #9B5100; }
+  #lista_notif .alert-box {
+    padding: 0px;
+    background-color: #9B5100; }
+    #lista_notif .alert-box a {
+      padding: 0px;
+      background-color: #9B5100; }
+    #lista_notif .alert-box .close {
+      background-color: #9B5100; }
+  #lista_notif .alert-box:hover {
+    padding: 0em;
+    background-color: #FF8500; }
+    #lista_notif .alert-box:hover a {
+      background-color: #FF8500; }
+    #lista_notif .alert-box:hover .close {
+      background-color: #FF8500; }
+
 /*# sourceMappingURL=general.css.map */

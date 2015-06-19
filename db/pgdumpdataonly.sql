@@ -93,7 +93,7 @@ COPY categorias (id, nombre_cat, padre_id) FROM stdin;
 -- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gallery
 --
 
-SELECT pg_catalog.setval('categorias_id_seq', 1, false);
+SELECT pg_catalog.setval('categorias_id_seq', 19, false);
 
 
 --
