@@ -46,4 +46,14 @@ class Etiqueta extends CI_Model{
       return FALSE;
     endif;
   }
+
+  public function by_id($hash_id){
+    $et = $this->db->get_where('etiquetas', ['id' => $hash_id]);
+
+    if($et->num_rows() > 0):
+      return $et->row_array();
+    else:
+      return FALSE;
+    endif;
+  }
 }

@@ -102,4 +102,43 @@ class Ajax extends CI_Controller {
     
     $this->Notificacion->ver_notif($notif_id);
   }
+
+  public function scroll_load(){
+    $offset     = $this->input->post('offset');
+    $cat_id     = $this->input->post('cat_id');
+    $user_fav   = $this->input->post('favs_nick');
+    $hashtag_id = $this->input->post('hashtag_id');
+
+    if($cat_id !== 0):
+      $primer = $this->db->get_where('categorias', ['id' => $cat_id])->row_array();
+      $arbol  = $this->Imagen->arbol($cat_id);
+
+      if($cat_id != '0'):
+        array_unshift($arbol, ['id'         => $primer['id'],
+                               'nombre_cat' => $primer['nombre_cat'],
+                               'padre_id'   => $primer['padre_id'] ]);
+      endif;
+
+      $unnested = $this->Imagen->unnest($arbol, []);
+    else:
+      $unnested = NULL;
+    endif;
+
+    if($user_fav != ''):
+      $user_fav = $this->Usuario->user_by_nick($user_fav)['id'];
+    else:
+      $user_fav = NULL;
+    endif;
+
+    if($hashtag_id != ''):
+      $etiqueta = $this->Etiqueta->by_id($hashtag_id);
+    else:
+      $etiqueta = NULL;
+    endif;
+
+    $imgs['imagenes'] = $this->Imagen->get_galeria(NULL, $unnested, $etiqueta, $user_fav, 
+                                                  $offset);
+
+    $this->load->view('galeria', $imgs);
+  }
 }

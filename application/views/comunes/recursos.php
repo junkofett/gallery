@@ -79,7 +79,12 @@
             },
       type: 'POST',
       success: function(data) {
-        cont.html(data);
+        if(data == 0){
+          cont.hide();
+        }else{
+          cont.show();
+          cont.html(data);
+        }
       }
     });
 
@@ -93,6 +98,9 @@
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
         
         $('#contents').append(data);
+        $('.clearing-thumbs').data('categoria', ev.prev('input').val());
+        $('.clearing-thumbs').data('offset', 8);
+
         ref_raty();
         favoritear();
         $('#contents').slideDown(300);
@@ -108,9 +116,66 @@
 
   }
 
+
+  function paginacion(){
+
+    $(window).scroll(function() {
+      if($(window).scrollTop() + $(window).height() == $(document).height()){
+        var offset    = $('.clearing-thumbs').data('offset');
+        var categoria = $('.clearing-thumbs').data('categoria');
+        var gal_type  = $('#gal_type').attr('name');
+
+        switch(gal_type){
+          case 'hashtag_id': var hashtag_id = $('#gal_type').val();
+                             var favs_nick = null;
+                             break;
+          case 'favs_nick' : var favs_nick  = $('#gal_type').val();
+                             var hashtag_id = null;
+                             break;
+          default:
+            var hashtag_id = null;
+            var fav_nick = null;
+        }
+
+        //console.log('gal_type '+gal_type);
+        //console.log('hashtag_id '+hashtag_id);
+        //console.log('favs_nick '+favs_nick);
+
+        //console.log('offset '+offset);
+        //console.log('cat id '+categoria);
+
+        $.ajax({
+          url: "<?= base_url() . 'index.php/ajax/scroll_load' ?>",
+          data: { '<?= $this->security->get_csrf_token_name(); ?>' :
+                    '<?= $this->security->get_csrf_hash(); ?>',
+                  "offset" : offset,
+                  "cat_id" : categoria,
+                  "hashtag_id" : hashtag_id,
+                  "favs_nick"  : favs_nick
+                },
+          type: 'POST',
+          async: true,
+          success: function(data) {
+            var imagenes = $(data).find('.prev');
+            $('.clearing-thumbs').append(imagenes);
+            favoritear();
+            ref_raty();
+          }
+        });
+
+        $('.clearing-thumbs').data('offset', (offset + 8));
+      }
+    });
+  }
+
   centrarForm();
+  paginacion();
   favoritear();
   ref_raty();
+
+
+  $('.clearing-thumbs').data('offset', 8);
+  $('.clearing-thumbs').data('categoria', 0);
 
   $(window).resize(function() {
     centrarForm();
@@ -129,7 +194,35 @@
 
     update_gallery(ev);
 
-    $.getJSON("<?= base_url() . 'index.php/ajax/get_parents/' ?>"+ ev.prev('input').val(),
+    $.ajax({
+        url: "<?= base_url() . 'index.php/ajax/get_parents/' ?>"+ ev.prev('input').val(),
+        data: { '<?= $this->security->get_csrf_token_name(); ?>' :
+                  '<?= $this->security->get_csrf_hash(); ?>',
+                "offset" : $('.clearing-thumbs').data('offset'),
+                "cat_id" : $('.clearing-thumbs').data('categoria')
+              },
+        type: 'GET',
+        async: false,
+        success: function(data) {
+          data =  $.parseJSON(data);
+          $('.menu-cat').removeClass('cat-active');
+          $('.cataccordion').removeClass('cat-open');
+
+          $('#cat-menu input').each(function(){
+            var cat = $(this);
+
+            $.each(data, function(e, v){
+              if(cat.val() == v){
+                cat.parent().addClass('cat-active');
+                cat.parent().parent().addClass('cat-open');
+              }
+            });
+          });
+
+        }
+      });
+
+   /* $.getJSON("<?= base_url() . 'index.php/ajax/get_parents/' ?>"+ ev.prev('input').val(),
       {'<?= $this->security->get_csrf_token_name(); ?>' : 
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
 
@@ -146,7 +239,7 @@
             }
           });
         }); 
-    });
+    });*/
 
     //$('.cat-open').slideToggle();
     if ($(this).parent().has("ul").hasClass('.cat-open')){
@@ -156,6 +249,11 @@
     $('.cat-open').each(function(){
       $(this).slideDown();
     });
+
+    //guarda en el data id de la categoria
+    $('.clearing-thumbs').data('categoria', ev.prev('input').val());
+    //reset de offset
+    $('.clearing-thumbs').data('offset', 8);
 
     $(this).next('ul').slideDown();
   });
@@ -310,6 +408,8 @@
           console.log(data);
         }
       });
+
+      reset_cont();
     }
   });
 </script>

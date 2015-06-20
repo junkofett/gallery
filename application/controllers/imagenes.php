@@ -34,7 +34,7 @@ class Imagenes extends CI_Controller {
     else:
       if(!$this->Usuario->existe($user_id)) redirect('inicio');
 
-      $user = $this->Usuario->user_by_id($user_id);
+      $user      = $this->Usuario->user_by_id($user_id);
       $user_id   = $user['id'];
       $user_nick = $user['nick'];
     endif;
@@ -45,6 +45,9 @@ class Imagenes extends CI_Controller {
     $data['favs']     = TRUE;
     $data['favsnick'] = $user_nick;
     $data['contents'] = $this->load->view('galeria', $galeria, TRUE);
+
+
+    //var_dump($galeria['imagenes']); die();
 
     $this->load->view('comunes/head', $head);
     $this->load->view('comunes/header', $this->Navheader->get_header());
@@ -61,6 +64,7 @@ class Imagenes extends CI_Controller {
 
     $data['contents']    = $this->load->view('galeria', $imgs, TRUE);
     $data['hashtag_nom'] = '#'.$et['nombre_et'];
+    $data['hashtag_id']  = $et['id'];
     $head['titulo']      = '#'.$et['nombre_et'].' - gallery';
 
     $this->load->view('comunes/head', $head);

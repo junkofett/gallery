@@ -7,11 +7,12 @@ class Imagen extends CI_Model{
     $this->categorias = $this->db->get('categorias')->result_array();
   }
 
-  public function get_galeria($user_id = NULL, $unnested = NULL, $etiqueta = NULL, $fav = NULL){
+  public function get_galeria($user_id = NULL, $unnested = NULL, $etiqueta = NULL, $fav = NULL, $offset = 0){
     //resolver nsfw
     //resolver paginacion
 
     $boolhashview = FALSE;
+    $boolfavview  = FALSE;
 
     if($user_id !== NULL):
       if($this->Usuario->existe($user_id)):
@@ -28,6 +29,11 @@ class Imagen extends CI_Model{
       $this->db->join('imgs_etiquetas ie', 'i.id = ie.imagenes_id');
       $this->db->join('etiquetas e', 'ie.etiquetas_id = e.id');
       $this->db->where('e.id', $etiqueta['id']);
+
+      $input = ['id'    => 'gal_type',
+                'name'  => 'hashtag_id',
+                'value' => $etiqueta['id']
+                ];
 
       $boolhashview = TRUE;
     endif;
@@ -46,9 +52,12 @@ class Imagen extends CI_Model{
       $user_id = $fav;
       $this->db->join('favoritos f', 'f.imagenes_id = i.id');
       $this->db->where('f.usuarios_id', $user_id);
+
+      $boolfavview = TRUE;
     endif;
 
-    $this->db->where('nsfw', 'f', 20, 0);
+    $this->db->limit(8, $offset);
+    $this->db->where('nsfw', 'f');
     $this->db->order_by('fecha_subida', 'desc');
     $res = $this->db->get();
 
@@ -67,62 +76,19 @@ class Imagen extends CI_Model{
       $imagenes[] = $this->add_hashtags($img, $boolhashview); 
     endforeach;
 
-    return $imagenes;
-  }
+    if($boolfavview):
+      $user = $this->Usuario->user_by_id($fav);
 
-  public function get_galeriaaaaaaaaaaaa($user_id = NULL, $unnested = NULL, $etiqueta = NULL, $fav = NULL){
-    //resolver nsfw
-    //resolver paginacion
+      $input = ['name'  => 'favs_nick',
+                'value' => $user['nick']
+               ];
+    endif;
 
-    $boolhashview = FALSE;
-
-    $this->db->from('usuarios u');
-
-    if($user_id !== NULL):
-      if($this->Usuario->existe($user_id)):
-        $this->db->join('imagenes i', 'i.usuarios_id = u.id');
-        $this->db->where('i.usuarios_id', $user_id);
-      endif;
+    if(isset($input)):
+      $imagenes['gal_type'] = $input;
     else:
-      $this->db->join('imagenes i', 'i.usuarios_id = u.id');
+      $imagenes['gal_type'] = ['name' => 'categorias', 'value' => "0"];
     endif;
-
-    if($etiqueta !== NULL):
-      $this->db->join('imgs_etiquetas ie', 'i.id = ie.imagenes_id');
-      $this->db->join('etiquetas e', 'ie.etiquetas_id = e.id');
-      $this->db->where('e.id', $etiqueta['id']);
-
-      $boolhashview = TRUE;
-    endif;
-
-    if($unnested !== NULL):
-      foreach ($unnested as $key => $value):
-        if($key > 0):
-          $this->db->or_where('categorias_id =', $value);
-        else:
-          $this->db->where('categorias_id =', $value);
-        endif;
-      endforeach;
-    endif;
-
-    if($fav !== NULL):
-      $user_id = $fav;
-      $this->db->join('favoritos f', 'f.imagenes_id = i.id');
-      $this->db->where('f.usuarios_id', $user_id);
-    endif;
-
-    $this->db->where('nsfw', 'f', 20, 0);
-    $this->db->order_by('fecha_subida', 'desc');
-    $res = $this->db->get();
-
-    $imgsnorate = $res->result_array();
-    $imagenes   = [];
-
-    foreach ($imgsnorate as $img):
-      $img        = $this->add_rate($img);
-      $img['fav'] = $this->comprobar_fav($img['id']);
-      $imagenes[] = $this->add_hashtags($img, $boolhashview); 
-    endforeach;
 
     return $imagenes;
   }

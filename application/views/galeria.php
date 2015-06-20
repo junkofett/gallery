@@ -1,4 +1,9 @@
 <ul class='clearing-thumbs large-block-grid-4 small-block-grid-2'>
+<?php 
+  $gal_type = $imagenes['gal_type'];
+  unset($imagenes['gal_type']) ; 
+?>
+<input type="hidden" id="gal_type" name=<?= $gal_type['name'] ?> value=<?= $gal_type['value'] ?> >
 <?php foreach ($imagenes as $imagen): ?>
   <li class='prev'>
     <div class="imagen">

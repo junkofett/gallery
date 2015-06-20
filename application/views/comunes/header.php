@@ -43,6 +43,7 @@
                 <?php if($this->Usuario->is_admin()): ?>
                 <li><?= anchor('admin/usuarios', 'Administrar Usuarios') ?></li>
                 <li><?= anchor('admin/categorias', 'Administrar Categorias') ?></li>
+                <li><?= anchor('chapus/rand_time', 'Randomizar Fechas') ?></li>
                 <?php endif; ?>
                 <li><?= anchor('usuarios/perfil/'.$this->session->userdata('nick'), 'Ver Perfil') ?></li>
                 <li><?= anchor('imagenes/favoritos', 'Ver Favoritos') ?></li>
