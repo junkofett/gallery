@@ -108,8 +108,9 @@ class Ajax extends CI_Controller {
     $cat_id     = $this->input->post('cat_id');
     $user_fav   = $this->input->post('favs_nick');
     $hashtag_id = $this->input->post('hashtag_id');
+    $user_perf  = $this->input->post('user_perf');
 
-    if($cat_id !== 0):
+    if($cat_id != 0):
       $primer = $this->db->get_where('categorias', ['id' => $cat_id])->row_array();
       $arbol  = $this->Imagen->arbol($cat_id);
 
@@ -136,8 +137,22 @@ class Ajax extends CI_Controller {
       $etiqueta = NULL;
     endif;
 
-    $imgs['imagenes'] = $this->Imagen->get_galeria(NULL, $unnested, $etiqueta, $user_fav, 
-                                                  $offset);
+    if($user_perf == ''):
+      $user_perf = NULL;
+    else:
+      $user_perf = $this->Usuario->user_by_nick($user_perf)['id'];
+    endif;
+
+    /*echo $user_fav.' user fav<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<';
+    echo $user_perf.' user perf<<<<<<<<<<<<<<<';
+    echo $etiqueta.' etiqueta<<<<<<<<'; 
+    echo $unnested. ' unnested<<<<<<<<<<<<<<<<<<';
+    echo $offset.' offsettttt<<<<<<<<<<<<<<<<<<<<';
+    echo $cat_id.' catiddddddd<<<<<<<<<<<<<<<<<'; die();*/
+
+    $imgs['imagenes'] = $this->Imagen->get_galeria($user_perf, $unnested, 
+                                                   $etiqueta, $user_fav, 
+                                                   $offset);
 
     $this->load->view('galeria', $imgs);
   }

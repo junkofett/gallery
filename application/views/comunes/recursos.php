@@ -127,35 +127,45 @@
 
         switch(gal_type){
           case 'hashtag_id': var hashtag_id = $('#gal_type').val();
-                             var favs_nick = null;
+                             var favs_nick  = null;
+                             var user_perf  = null;
                              break;
           case 'favs_nick' : var favs_nick  = $('#gal_type').val();
                              var hashtag_id = null;
+                             var user_perf  = null;
+                             break;
+          case 'user_perf' : var favs_nick  = null;
+                             var hashtag_id = null;
+                             var user_perf  = $('#gal_type').val();
                              break;
           default:
             var hashtag_id = null;
-            var fav_nick = null;
+            var fav_nick   = null;
+            var user_perf = null;
         }
 
-        //console.log('gal_type '+gal_type);
-        //console.log('hashtag_id '+hashtag_id);
-        //console.log('favs_nick '+favs_nick);
+        console.log('gal_type '+gal_type);
+        console.log('hashtag_id '+hashtag_id);
+        console.log('favs_nick '+favs_nick);
 
-        //console.log('offset '+offset);
-        //console.log('cat id '+categoria);
+        console.log('offset '+offset);
+        console.log('cat id '+categoria);
+        console.log('user_perf '+user_perf);
 
         $.ajax({
           url: "<?= base_url() . 'index.php/ajax/scroll_load' ?>",
           data: { '<?= $this->security->get_csrf_token_name(); ?>' :
                     '<?= $this->security->get_csrf_hash(); ?>',
-                  "offset" : offset,
-                  "cat_id" : categoria,
+                  "offset"     : offset,
+                  "cat_id"     : categoria,
                   "hashtag_id" : hashtag_id,
-                  "favs_nick"  : favs_nick
+                  "favs_nick"  : favs_nick,
+                  "user_perf"  : user_perf
                 },
           type: 'POST',
           async: true,
           success: function(data) {
+            console.log(data);
             var imagenes = $(data).find('.prev');
             $('.clearing-thumbs').append(imagenes);
             favoritear();
@@ -270,6 +280,13 @@
         $('#seguidos-user').remove();
         $('.tabs-content').append(data);
 
+        $('#gal_type').attr('name', 'user_perf');
+
+        console.log($('#gal_type').attr('name'));
+        console.log($('#gal_type').attr('value'));
+
+
+        $('.clearing-thumbs').data('offset', 8);
         favoritear();
         ref_raty();
     });
@@ -285,6 +302,13 @@
         $('#seguidos-user').remove();
         $('.tabs-content').append(data);
         
+        $('#gal_type').attr('name', 'favs_nick');
+
+        console.log($('#gal_type').attr('name'));
+        console.log($('#gal_type').attr('value'));
+
+
+        $('.clearing-thumbs').data('offset', 8);
         favoritear();
         ref_raty();
     });
@@ -298,7 +322,10 @@
        '<?= $this->security->get_csrf_hash(); ?>'}, function(data){
         $('.clearing-thumbs').remove();
         $('#seguidos-user').remove();
-        $('.tabs-content').append(data);        
+        $('.tabs-content').append(data);
+
+        
+        $('.clearing-thumbs').data('offset', 8);
     });
   });
 

@@ -84,6 +84,14 @@ class Imagen extends CI_Model{
                ];
     endif;
 
+
+    if($user_id != NULL):
+      $input = ['id'    => 'gal_type',
+                'name'  => 'user_perf',
+                'value' => $this->Usuario->user_by_id($user_id)['nick']
+                ];
+    endif;
+
     if(isset($input)):
       $imagenes['gal_type'] = $input;
     else:
