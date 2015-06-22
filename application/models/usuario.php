@@ -224,10 +224,13 @@ class Usuario extends CI_Model{
 
       $this->borrar_seguidores($nick);
 
-
+      $this->db->where('usuarios_id', $user->id);
+      $this->db->delete('comentarios');
       //$this->db->where('seguidos_id', $user->id);
       $this->db->where('usuarios_id', $user->id);
       $this->db->delete('notificaciones'); 
+
+      $this->session->sess_destroy();
 
       return $this->db->delete('usuarios', ['nick' => $nick]);
     else:
