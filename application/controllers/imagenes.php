@@ -92,7 +92,7 @@ class Imagenes extends CI_Controller {
 
     $comentario = $this->Imagen->insertar_comentario($img_id, $texto);
     
-    //$this->Notificacion->notificar_comentario($comentario);
+    $this->Notificacion->notificar_comentario($comentario);
     $this->load->view('comentarios', ['comentarios' => [$comentario]]);
   }
 

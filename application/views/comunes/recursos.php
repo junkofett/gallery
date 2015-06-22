@@ -1,4 +1,5 @@
 <script type="text/javascript" src=<?= base_url().'js/jquery-1.11.2.js'?>></script>
+<script type="text/javascript" src=<?= base_url().'js/jquery.cookie.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/foundation.min.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/vendor/modernizr.js'?>></script>
 <script type="text/javascript" src=<?= base_url().'js/raty/jquery.raty.js'?>></script>
@@ -7,7 +8,7 @@
 <?php if(!$this->session->userdata('id')): ?>
 <div id="reg-login" class="reveal-modal text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
   <h3 id="modalTitle">Debes estar logueado para realizar esta acción</h3>
-  <?= anchor('/usuarios/registro', '<button class="button">Registrate!</button>') ?>
+  <?= anchor('/usuarios/registro', 'Registrate!', ['class' => 'button expand']) ?>
   <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
 <?php endif; ?>
@@ -36,6 +37,10 @@
     return is_logged;
   }
   
+  function guarda_cookie(){
+   $.cookie("ultimo_user", $('#nick_field').val(), {expires : 1 });
+  }
+
   function ref_raty(){
     $('.raty').raty({
       path: "<?= base_url().'js/raty/images'?>",
@@ -91,7 +96,8 @@
   }
 
   function update_gallery(ev){
-    $('#contents').slideUp(300, function(){
+    $('#contents').slideUp(300, function(e){
+
       $('.clearing-thumbs').remove();
       $.post("<?= base_url() . 'index.php/ajax/imgs_por_cat/' ?>"+ ev.prev('input').val(),
       {'<?= $this->security->get_csrf_token_name(); ?>' : 
@@ -144,6 +150,7 @@
             var user_perf = null;
         }
 
+        /*
         console.log('gal_type '+gal_type);
         console.log('hashtag_id '+hashtag_id);
         console.log('favs_nick '+favs_nick);
@@ -151,7 +158,8 @@
         console.log('offset '+offset);
         console.log('cat id '+categoria);
         console.log('user_perf '+user_perf);
-
+        */
+        
         $.ajax({
           url: "<?= base_url() . 'index.php/ajax/scroll_load' ?>",
           data: { '<?= $this->security->get_csrf_token_name(); ?>' :
@@ -192,6 +200,12 @@
   });
 
   $('#contents').slideDown(300);
+
+  if(typeof $.cookie('ultimo_user') != 'undefined'){
+    $('#nick_field').val($.cookie('ultimo_user'));
+  }
+
+  //---------------------------------------------------------------------
 
   $('#offcanvas_cat a').on('click', function(e) {
     var ev = $(this);

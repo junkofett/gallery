@@ -208,17 +208,31 @@ class Usuario extends CI_Model{
     return $res->result_array();
   }
 
-  public function borrar($nick){
-    if(!$this->Usuario->is_admin()) redirect('inicio');
-    if(!$this->Usuario->existe_nick($nick)) redirect('admin/usuarios');
-
+  public function borrar_seguidores($nick){
     $user = new Usuario($nick);
 
-    $this->db->where('seguidos_id', $user->id);
-    $this->db->or_where('usuarios_id', $user->id);
-    $this->db->delete('notificaciones');
+    $this->db->where('usuarios_id', $user->id);
+    $this->db->or_where('seguidos_id', $user->id);
+    $this->db->delete('seguidores');
+  }
 
-    return $this->db->delete('usuarios', ['nick' => $nick]);
+  public function borrar($nick){
+    if(!$this->Usuario->is_admin() || !$this->Usuario->is_self($nick)):
+      if(!$this->Usuario->existe_nick($nick)) redirect('admin/usuarios');
+
+      $user = new Usuario($nick);
+
+      $this->borrar_seguidores($nick);
+
+
+      //$this->db->where('seguidos_id', $user->id);
+      $this->db->where('usuarios_id', $user->id);
+      $this->db->delete('notificaciones'); 
+
+      return $this->db->delete('usuarios', ['nick' => $nick]);
+    else:
+     redirect('inicio');
+    endif;
   }
 
   public function is_self($nick){

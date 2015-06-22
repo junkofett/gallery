@@ -235,7 +235,7 @@ class Imagen extends CI_Model{
     $img = $this->db->get_where('imagenes', ['id' => $this->db->insert_id()])
                     ->row_array();
 
-    //$this->Notificacion->notificar_publicacion($img);
+    $this->Notificacion->notificar_publicacion($img);
 
     if(isset($hashtags)):
       $img_id  = $this->db->insert_id();

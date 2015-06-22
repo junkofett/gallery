@@ -50,7 +50,7 @@ a:link{color: $purple;}
 
 //-----------------------------------------------------------FORMULARIOS + MODAL
 
-#modalTitle{color: lightgray;}
+#modalTitle{color: white;}
 
 #reg-form{min-height: 100%;
   background: url("../images/gallerylogo.svg"),linear-gradient($lightpurple 70%, $pink);
@@ -153,6 +153,17 @@ ul[class=dropdown]{
   box-shadow: 1px 1px 1px $purple;
 }
 
+#reg-button{
+  margin: 2em;
+  padding: 0.4em;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: $pink;
+}
+
+#reg-button:hover{margin: 2em;
+  background-color: $darkblue;}
+
 //--------------------------------------------------------------------CATEGORIAS
 
 #categorias ul {
@@ -232,8 +243,8 @@ ul[class=dropdown]{
   p{
     font-size: 0.9em;
   
-    a{color: $lighterpurple;}
-    a:hover{color: $purple;}
+    a{color: $purple;}
+    a:hover{color: $pink;}
   }
 }
 
@@ -275,6 +286,7 @@ section[role="main"]{padding-top: 1em;}
 
   span{
     font-size: 0.8em;
+    margin-left: 1em;
 
     a{color: $purple;}
     a:hover{color: $pink;}
@@ -289,7 +301,27 @@ section[role="main"]{padding-top: 1em;}
            color: $lightpurple;
            text-shadow: 2px 2px $purple;}
 
-.seguido{padding: 1em;}
+.seguido{padding: 1em;
+    background-color: $purple !important;
+    margin-top: 0.5em;
+
+    a{
+      color: white !important;
+    }
+}
+
+.seguido:hover{
+  background-color: $pink !important;
+  color: white;
+
+    a{
+      color: $purple !important;
+    }
+}
+
+.editar_user, .seguir, .siguiendo{
+  color: white !important;
+}
 
 //----------------------------------------------------------------ADMIN
 #admin-users{
@@ -311,22 +343,22 @@ section[role="main"]{padding-top: 1em;}
   background-color: $darkorange;
 
   .alert-box{
-    padding: 0px;
+    padding: 1em;
     background-color: $darkorange;
 
     a{
-      padding: 0px;
+      padding-left: -1px;
       background-color: $darkorange;
     }
 
     .close{
       //position: relative;
-      background-color: $darkorange;
+      background-color: $pink;
     }
   }
 
   .alert-box:hover{
-    padding: 0em;
+    padding: 1em;
     background-color: $orange;
 
     a{
@@ -335,7 +367,7 @@ section[role="main"]{padding-top: 1em;}
 
     .close{
       //position: relative;
-      background-color: $orange;
+      background-color: $pink;
     }
   }
 

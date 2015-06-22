@@ -23,26 +23,32 @@ class Admin extends CI_Controller {
   }
 
   public function borrar_user($nick){
-    if(!$this->Usuario->is_admin()) redirect('inicio');
-    if(!$this->Usuario->existe_nick($nick)) redirect('inicio');
-    
-    $head['titulo']  = 'admin - borrar usuario';
-    $data['usuario'] = $this->Usuario->user_by_nick($nick);
+    if(!$this->Usuario->is_admin() || !$this->Usuario->is_self($nick)):
+      if(!$this->Usuario->existe_nick($nick)) redirect('inicio');
+      
+      $head['titulo']  = 'admin - borrar usuario';
+      $data['usuario'] = $this->Usuario->user_by_nick($nick);
 
-    $this->load->view('comunes/head', $head);
-    $this->load->view('comunes/header', $this->Navheader->get_header());
-    $this->load->view('admin/borrar_usuario', $data);
-    $this->load->view('comunes/recursos');
+      $this->load->view('comunes/head', $head);
+      $this->load->view('comunes/header', $this->Navheader->get_header());
+      $this->load->view('admin/borrar_usuario', $data);
+      $this->load->view('comunes/recursos');
+    else:
+       redirect('inicio');
+    endif;
   }
 
   public function conf_borrar_usuario($nick){
-    if(!$this->Usuario->is_admin()) redirect('inicio');
-    if(!$this->Usuario->existe_nick($nick)) redirect('inicio');
+    if(!$this->Usuario->is_admin() || !$this->Usuario->is_self($nick)):
+      if(!$this->Usuario->existe_nick($nick)) redirect('inicio');
 
-    if($this->Usuario->borrar($nick)):
-      redirect('admin/usuarios');
+      if($this->Usuario->borrar($nick)):
+        redirect('admin/usuarios');
+      else:
+        redirect('inicio');//VISTA ERRORES!!!
+      endif;
     else:
-      redirect('inicio');//VISTA ERRORES!!!
+       redirect('inicio');
     endif;
   }
 

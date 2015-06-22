@@ -3,8 +3,8 @@
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1 class="show-for-medium-up"><?= anchor('inicio', img('images/logo.svg')) ?></h1>
-          <h1 class="show-for-small-only"><?= anchor('inicio', img('images/imagotipo.svg'),
+          <h1 class="show-for-large"><?= anchor('inicio', img('images/logo.svg')) ?></h1>
+          <h1 class="hide-for-large"><?= anchor('inicio', img('images/imagotipo.svg'),
                     ['class' => "left-off-canvas-toggle"]) ?></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. 

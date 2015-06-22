@@ -3,7 +3,9 @@
   $gal_type = $imagenes['gal_type'];
   unset($imagenes['gal_type']) ; 
 ?>
+<form>
 <input type="hidden" id="gal_type" name=<?= $gal_type['name'] ?> value=<?= $gal_type['value'] ?> >
+</form>
 <?php foreach ($imagenes as $imagen): ?>
   <li class='prev'>
     <div class="imagen">
@@ -23,14 +25,15 @@
       </div>
       <hr>
       <div class="row">
-        <div class="large-6 columns by-user"><p>por <?= anchor('usuarios/perfil/'
+        <div class="large-12 columns left by-user"><p>por <?= anchor('usuarios/perfil/'
                                             .$imagen['nick'], $imagen['nick']) ?></p>
         </div>
-        <div class="large-6 columns">
+      <div class="row">
+        <div class="large-12 columns">
         <?php if(!$imagen['fav']): ?>
-          <button class="button tiny right expand fav-button"><i class="fa fa-heart"></i></button>
+          <button class="button tiny expand fav-button"><i class="fa fa-heart"></i></button>
         <?php else: ?>
-          <button class="button tiny right expand fav-button disabled"><i class="fa fa-heart-o"></i></button>
+          <button class="button tiny expand fav-button disabled"><i class="fa fa-heart-o"></i></button>
         <?php endif; ?>
         </div>
       </div>
@@ -41,6 +44,8 @@
                                             '#'.$hashtag['nombre_et']) ?></span>
           <?php endforeach; ?>
         </div>
+      </div>
+
       </div>
     </div>
   </li>

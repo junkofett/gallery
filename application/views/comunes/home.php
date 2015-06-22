@@ -2,7 +2,7 @@
 <div class="off-canvas-wrap" data-offcanvas>
   <div class="inner-wrap">
     <!-- Off Canvas Menu -->
-    <aside class="left-off-canvas-menu show-for-small-only">
+    <aside class="left-off-canvas-menu hide-for-large">
         <!-- whatever you want goes here -->
       <ul class="off-canvas-list" id="offcanvas_cat">
         <li class="has-submenu">
@@ -41,7 +41,7 @@
 <div class='row<?= (isset($favs) || isset($hashtag_nom) ? " margin-row" : "") ?>' id="home">
   <?php if(isset($categorias)): ?>
   <?php $classcontents = "large-10 columns"; ?>
-  <aside id="categorias" class='large-2 columns hide-for-small'>
+  <aside id="categorias" class='large-2 columns show-for-large'>
     <ul id="cat-menu">
       <li class="menu-cat button">
         <input type="hidden" value="0">
@@ -63,5 +63,6 @@
 <?php if(isset($categorias)): ?>
   <!-- close the off-canvas menu -->
   <a class="exit-off-canvas"></a>
+</div>
 </div>
 <?php endif; ?>

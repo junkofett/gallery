@@ -31,4 +31,9 @@
     </div>
     <?= form_close() ?>
   </div>
+  <div class="row">
+    <div class="large-text-center">
+      <?= anchor('admin/borrar_user/'.$user['nick'], '<i class="fa fa-trash"></i>', ['class' => 'button expand'])?>
+    </div>
+  </div>
 </section>

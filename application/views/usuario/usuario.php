@@ -6,7 +6,7 @@
       </div>
       <div class="large-4 columns">
       <?php  if($this->Usuario->is_self($nick) || $this->Usuario->is_admin()): ?>
-        <button class="button tiny"><?= anchor('/usuarios/editar/'.$nick, 'editar perfil') ?></button>
+        <?= anchor('/usuarios/editar/'.$nick, 'editar perfil', ['class' => "button tiny editar_user"]) ?>
       <?php else: ?>
         <?php if (!$usuario_seguido): ?>
           <button class="button tiny seguir">
@@ -14,7 +14,7 @@
             <i class="fa fa-user-plus"></i> seguir
           </button>
         <?php else: ?>
-          <button class="button tiny">
+          <button class="button tiny siguiendo">
             siguiendo
           </button>
         <?php endif; ?>
